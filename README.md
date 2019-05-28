@@ -9,6 +9,7 @@ https://github.com/luzi82/py.futsu
 
 ## Cheat sheet
 
+```
 virtualenv --python python3 venv
 source venv/bin/activate
 
@@ -32,3 +33,4 @@ cd ..
 source venv/bin/activate
 python3 -m twine upload dist/*
 deactivate
+```
