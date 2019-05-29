@@ -18,6 +18,7 @@ pip install --upgrade setuptools wheel nose twine keyring
 keyring set https://upload.pypi.org/legacy/ luzi82
 keyring set https://test.pypi.org/legacy/ luzi82
 
+rm -rf dist
 python3 setup.py test
 python3 setup.py sdist bdist_wheel
 
