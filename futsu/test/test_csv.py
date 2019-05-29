@@ -6,7 +6,7 @@ import os
 class TestCsv(TestCase):
 
     def test_read_csv(self):
-        v_dict_list, col_name_list = fcsv.read_csv(os.path.join('futsu','test','test_csv.csv'))
+        v_dict_list, col_name_list = fcsv.read_csv(os.path.join('futsu','test','test_csv_0.csv'))
         self.assertEqual(col_name_list,['a','b'])
         self.assertEqual(len(v_dict_list),2)
         self.assertEqual(v_dict_list[0],{'a':'1','b':'2'})

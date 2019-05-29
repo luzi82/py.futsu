@@ -6,7 +6,7 @@ import os
 class TestIo(TestCase):
 
     def test_json_read(self):
-        data = fjson.json_read(os.path.join('futsu','test','test_json.json'))
+        data = fjson.json_read(os.path.join('futsu','test','test_json_0.json'))
         self.assertEqual(data,{'qwer':'asdf'})
 
     def test_json_write(self):
