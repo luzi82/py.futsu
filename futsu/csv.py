@@ -8,6 +8,8 @@ def read_csv(fn):
             if col_name_list is None:
                 col_name_list = list(line)
             else:
+                if((len(col_name_list)==1) and (len(line)==0)):
+                     line = ['']
                 assert(len(line)==len(col_name_list))
                 ret.append({col_name_list[i]:line[i] for i in range(len(col_name_list))})
     return ret, col_name_list
