@@ -13,11 +13,15 @@ https://github.com/luzi82/py.futsu
 virtualenv --python python3 venv
 source venv/bin/activate
 
-pip install --upgrade setuptools wheel nose twine
+pip install --upgrade setuptools wheel nose twine keyring
+
+keyring set https://upload.pypi.org/legacy/ luzi82
+keyring set https://test.pypi.org/legacy/ luzi82
+
 python3 setup.py test
 python3 setup.py sdist bdist_wheel
 
-python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+python3 -m twine upload -u luzi82 --repository-url https://test.pypi.org/legacy/ dist/*
 
 deactivate
 
@@ -31,6 +35,6 @@ deactivate
 cd ..
 
 source venv/bin/activate
-python3 -m twine upload dist/*
+python3 -m twine upload -u luzi82 dist/*
 deactivate
 ```
