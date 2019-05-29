@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="futsu",
-    version="0.0.4",
+    version="0.0.5",
     author="Luzi Leung",
     author_email="luzi82@gmail.com",
     description="Very reusable python code",
