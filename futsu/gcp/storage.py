@@ -26,3 +26,15 @@ def is_gs_bucket_path(path):
 def is_gs_file_path(path):
     init_FILE_PATH_FORMAT_RE()
     return FILE_PATH_FORMAT_RE.fullmatch(path) is not None
+
+def prase_bucket_path(path):
+    init_BUCKET_PATH_FORMAT_RE()
+    m = BUCKET_PATH_FORMAT_RE.fullmatch(path)
+    if not m: raise ValueError()
+    return m.group(1)
+
+def prase_file_path(path):
+    init_FILE_PATH_FORMAT_RE()
+    m = FILE_PATH_FORMAT_RE.fullmatch(path)
+    if not m: raise ValueError()
+    return m.group(1), m.group(2)
