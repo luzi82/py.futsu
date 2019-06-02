@@ -34,3 +34,13 @@ class TestFs(TestCase):
             fs.reset_dir(tmp_dirname) # test clean tmp_filename
             self.assertTrue(os.path.isdir(tmp_dirname))
             self.assertFalse(os.path.isfile(tmp_filename))
+
+    def test_diff(self):
+        self.assertFalse(fs.diff(
+            os.path.join('futsu','test','test_diff_0.txt'),
+            os.path.join('futsu','test','test_diff_1.txt')
+        ))
+        self.assertTrue(fs.diff(
+            os.path.join('futsu','test','test_diff_0.txt'),
+            os.path.join('futsu','test','test_diff_2.txt')
+        ))

@@ -38,3 +38,31 @@ def prase_file_path(path):
     m = FILE_PATH_FORMAT_RE.fullmatch(path)
     if not m: raise ValueError()
     return m.group(1), m.group(2)
+
+def bucket(gs_path, client):
+    bucket_name = prase_bucket_path(gs_path)
+    return client.bucket(bucket_name)
+
+def blob(gs_path, client):
+    bucket_name, blob_name = prase_file_path(gs_path)
+    return client.bucket(bucket_name).blob(blob_name)
+
+def cp_local_to_gcp(src,dst,client):
+    blob(dst, client).upload_from_filename(src)
+
+def cp_gcp_to_local(src,dst,client):
+    blob(src, client).download_to_filename(dst)
+
+def set_string(dst,s,client):
+    blob(dst, client).upload_from_string(s.encode('utf8'))
+
+def get_string(src,client):
+    return blob(src, client).download_as_string().decode('utf8')
+
+def exist(path,client):
+    return blob(path, client).exists()
+
+def rm(path,client):
+    b = blob(path, client)
+    if b.exists():
+        b.delete()
