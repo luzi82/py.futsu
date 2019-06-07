@@ -42,4 +42,12 @@ cd ..
 source venv/bin/activate
 python3 -m twine upload -u luzi82 dist/*
 deactivate
+
+# short output
+
+   rm -rf dist \
+&& python3 setup.py test \
+&& python3 setup.py sdist bdist_wheel \
+&& python3 -m twine upload -u luzi82 dist/*
+
 ```
