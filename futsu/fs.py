@@ -12,3 +12,6 @@ def reset_dir(out_dir):
 
 def diff(fn0,fn1):
     return not filecmp.cmp(fn0,fn1)
+
+def cp(dst, src):
+    shutil.copyfile(src, dst)

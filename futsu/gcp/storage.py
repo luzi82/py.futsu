@@ -44,10 +44,10 @@ def blob(gs_path, client):
     bucket_name, blob_name = prase_blob_path(gs_path)
     return client.bucket(bucket_name).blob(blob_name)
 
-def file_to_blob(src,dst,client):
+def file_to_blob(dst,src,client):
     blob(dst, client).upload_from_filename(src)
 
-def blob_to_file(src,dst,client):
+def blob_to_file(dst,src,client):
     blob(src, client).download_to_filename(dst)
 
 def string_to_blob(dst,s,client):

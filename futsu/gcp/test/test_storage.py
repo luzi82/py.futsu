@@ -68,8 +68,8 @@ class TestStorage(TestCase):
             tmp_gs_path  = 'gs://futsu-test/test-CQJWTXYXEJ-{0}'.format(timestamp)
             tmp_filename = os.path.join(tempdir,'PKQXWFJWRB')
             
-            fstorage.file_to_blob(src_fn,tmp_gs_path,client)
-            fstorage.blob_to_file(tmp_gs_path,tmp_filename,client)
+            fstorage.file_to_blob(tmp_gs_path,src_fn,client)
+            fstorage.blob_to_file(tmp_filename,tmp_gs_path,client)
             
             self.assertFalse(ffs.diff(src_fn,tmp_filename))
 

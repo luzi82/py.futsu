@@ -44,3 +44,15 @@ class TestFs(TestCase):
             os.path.join('futsu','test','test_diff_0.txt'),
             os.path.join('futsu','test','test_diff_2.txt')
         ))
+
+    def test_cp(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'YHGASBIGHI')
+            fs.cp(
+                tmp_filename,
+                os.path.join('futsu','test','test_cp_0.txt')
+            )
+            self.assertFalse(fs.diff(
+                tmp_filename,
+                os.path.join('futsu','test','test_cp_0.txt')
+            ))

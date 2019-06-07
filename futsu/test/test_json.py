@@ -5,19 +5,19 @@ import os
 
 class TestJson(TestCase):
 
-    def test_file_input(self):
-        data = fjson.file_input(os.path.join('futsu','test','test_json_0.json'))
+    def test_file_to_data(self):
+        data = fjson.file_to_data(os.path.join('futsu','test','test_json_0.json'))
         self.assertEqual(data,{'qwer':'asdf'})
 
-    def test_file_output(self):
+    def test_data_to_file(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'ALSFAWFHMY')
 
             self.assertFalse(os.path.isfile(tmp_filename))
 
             data={'qwer':'asdf'}
-            fjson.file_output(tmp_filename, data)
+            fjson.data_to_file(tmp_filename, data)
             self.assertTrue(os.path.isfile(tmp_filename))
             
-            data = fjson.file_input(tmp_filename)
+            data = fjson.file_to_data(tmp_filename)
             self.assertEqual(data,{'qwer':'asdf'})
