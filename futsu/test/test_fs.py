@@ -56,3 +56,26 @@ class TestFs(TestCase):
                 tmp_filename,
                 os.path.join('futsu','test','test_cp_0.txt')
             ))
+
+    def test_file_to_string_list(self):
+        line_list = fs.file_to_string_list(os.path.join('futsu','test','test_fs_0.txt'))
+        self.assertEqual(line_list,['qwer','asdf'])
+
+        line_list = fs.file_to_string_list(os.path.join('futsu','test','test_fs_1.txt'))
+        self.assertEqual(line_list,['qwer','asdf'])
+
+        line_list = fs.file_to_string_list(os.path.join('futsu','test','test_fs_2.txt'))
+        self.assertEqual(line_list,['qwer','asdf',''])
+
+    def test_string_list_to_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'PRXNBTESJS')
+
+            line_list = ['qwer','asdf']
+            fs.string_list_to_file(tmp_filename, line_list)
+            self.assertEqual(line_list,['qwer','asdf'])
+
+            line_list = ['qwer','asdf','']
+            fs.string_list_to_file(tmp_filename, line_list)
+            self.assertEqual(line_list,['qwer','asdf',''])
+            
