@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="futsu",
-    version="0.0.10",
+    version="0.0.11",
     author="Luzi Leung",
     author_email="luzi82@gmail.com",
     description="Very reusable python code",
@@ -19,6 +19,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     test_suite='nose.collector',
+    install_requires=['lazy-import'],
     tests_require=['nose'],
     python_requires='>=3',
 )
