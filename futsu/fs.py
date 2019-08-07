@@ -26,3 +26,10 @@ def string_list_to_file(fn, txt_list, encoding='utf-8'):
     with open(fn, mode='wt', encoding=encoding) as fout:
         for txt in txt_list:
             fout.write('{}\n'.format(txt))
+
+def find_file(dir):
+    file_list = []
+    for root,_,files in os.walk(dir):
+        for file in files:
+            file_list.append(os.path.join(root,file))
+    return file_list
