@@ -27,6 +27,7 @@ def string_list_to_file(fn, txt_list, encoding='utf-8'):
         for txt in txt_list:
             fout.write('{}\n'.format(txt))
 
+# TODO need testcase
 def find_file(dir):
     file_list = []
     for root,_,files in os.walk(dir):
