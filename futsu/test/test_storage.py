@@ -27,3 +27,15 @@ class TestStorge(TestCase):
             storage.path_to_local(tmp_filename,tmp_gs_blob)
             
             self.assertFalse(fs.diff(tmp_filename,src_file))
+
+    def test_s3(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'TMWGHOKDRE')
+            src_file = os.path.join('futsu','test','test_storage_0.txt')
+            timestamp = int(time.time())
+            tmp_path = 's3://futsu-test/test-KWPIYZVIYK-{0}'.format(timestamp)
+            
+            storage.local_to_path(tmp_path,src_file)
+            storage.path_to_local(tmp_filename,tmp_path)
+            
+            self.assertFalse(fs.diff(tmp_filename,src_file))
