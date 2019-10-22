@@ -27,6 +27,14 @@ def string_list_to_file(fn, txt_list, encoding='utf-8'):
         for txt in txt_list:
             fout.write('{}\n'.format(txt))
 
+def file_to_bytes(fn):
+    with open(fn, mode='rb') as fin:
+        return fin.read()
+
+def bytes_to_file(fn, bytes):
+    with open(fn, mode='wb') as fout:
+        fout.write(bytes)
+
 # TODO need testcase
 def find_file(dir):
     file_list = []

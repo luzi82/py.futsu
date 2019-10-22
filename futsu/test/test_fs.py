@@ -78,4 +78,11 @@ class TestFs(TestCase):
             line_list = ['qwer','asdf','']
             fs.string_list_to_file(tmp_filename, line_list)
             self.assertEqual(line_list,['qwer','asdf',''])
+
+    def test_file_bytes_io(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'INUDYDVGRH')
             
+            fs.bytes_to_file(tmp_filename, 'UIIUAZUNNF'.encode('utf-8'))
+            txt = fs.file_to_bytes(tmp_filename).decode('utf-8')
+            self.assertEqual(txt,'UIIUAZUNNF')
