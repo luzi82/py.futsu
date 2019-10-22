@@ -1,10 +1,11 @@
-/.project
-/futsu_luzi82.egg-info/
-/venv/
-__pycache__
 *.pyc
+/.eggs/
+/.project
 /build/
 /dist/
-/tmp/
-futsu.egg-info
+/futsu_luzi82.egg-info/
 /key/
+/tmp/
+/venv/
+__pycache__
+futsu.egg-info
