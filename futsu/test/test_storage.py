@@ -4,6 +4,7 @@ import tempfile
 import os
 import futsu.fs as fs
 import time
+import futsu.json
 
 class TestStorge(TestCase):
 
@@ -39,3 +40,11 @@ class TestStorge(TestCase):
             storage.path_to_local(tmp_filename,tmp_path)
             
             self.assertFalse(fs.diff(tmp_filename,src_file))
+
+    def test_http(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'RICFYWBCVI')
+            tmp_path = 'https://httpbin.org/get'
+            storage.path_to_local(tmp_filename,tmp_path)
+            data = futsu.json.file_to_data(tmp_filename)
+            self.assertEqual(data['url'],tmp_path)
