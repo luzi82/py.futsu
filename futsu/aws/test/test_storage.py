@@ -1,6 +1,7 @@
 from unittest import TestCase
 import futsu.aws.s3 as fstorage
 import futsu.fs as ffs
+import futsu.storage as ffstorage
 import tempfile
 import os
 #from google.cloud import storage as gcstorage
@@ -100,3 +101,32 @@ class TestStorage(TestCase):
         fstorage.blob_rm(tmp_gs_path,client)
 
         self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
+
+    def test_acl(self):
+        client = fstorage.create_client()
+        with tempfile.TemporaryDirectory() as tempdir:
+            timestamp = int(time.time())
+            src_fn = os.path.join('futsu','gcp','test','test_storage.txt')
+            tmp_gs_path  = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_http_path  = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_filename = os.path.join(tempdir,'QHDCXHYRKZ')
+            
+            client = fstorage.create_client()
+
+            # no upload, should be 404
+            with self.assertRaises(Exception):
+                blob_to_file(tmp_filename,tmp_http_path,client)
+
+            # upload
+            fstorage.file_to_blob(tmp_gs_path,src_fn,client)
+            
+            # bad acl, should be 403
+            with self.assertRaises(Exception):
+                ffstorage.path_to_local(tmp_filename,tmp_http_path)
+            
+            # set acl
+            fstorage.set_blob_acl(tmp_gs_path, 'public-read', client)
+            
+            # should run ok
+            ffstorage.path_to_local(tmp_filename,tmp_http_path)
+            self.assertFalse(ffs.diff(src_fn,tmp_filename))

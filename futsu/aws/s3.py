@@ -115,3 +115,11 @@ def blob_rm(path,client):
         Bucket = bucket_name,
         Key = object_key,
     )
+
+def set_blob_acl(path, acl, client):
+    bucket_name, object_key = prase_blob_path(path)
+    client.put_object_acl(
+        Bucket = bucket_name,
+        Key = object_key,
+        ACL = acl,
+    )
