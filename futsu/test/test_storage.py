@@ -5,6 +5,7 @@ import os
 import futsu.fs as fs
 import time
 import futsu.json
+import json
 
 class TestStorge(TestCase):
 
@@ -16,6 +17,12 @@ class TestStorge(TestCase):
             storage.local_to_path(tmp_filename,src_file)
             
             self.assertFalse(fs.diff(tmp_filename,src_file))
+            
+            tmp_filename = os.path.join(tempdir,'NKNVMMYPUI')
+            bytes0=b'YENLUMVECW'
+            storage.bytes_to_path(tmp_filename,bytes0)
+            bytes1=storage.path_to_bytes(tmp_filename)
+            self.assertEqual(bytes0,bytes1)
 
     def test_gcp(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -29,6 +36,12 @@ class TestStorge(TestCase):
             
             self.assertFalse(fs.diff(tmp_filename,src_file))
 
+            tmp_gs_blob = 'gs://futsu-test/test-DQZFYPFNUV-{0}'.format(timestamp)
+            bytes0=b'RZCPRGZZBC'
+            storage.bytes_to_path(tmp_gs_blob,bytes0)
+            bytes1=storage.path_to_bytes(tmp_gs_blob)
+            self.assertEqual(bytes0,bytes1)
+
     def test_s3(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'TMWGHOKDRE')
@@ -41,10 +54,20 @@ class TestStorge(TestCase):
             
             self.assertFalse(fs.diff(tmp_filename,src_file))
 
+            tmp_gs_blob = 's3://futsu-test/test-LKUDEBPHEF-{0}'.format(timestamp)
+            bytes0=b'SUZODZKFXW'
+            storage.bytes_to_path(tmp_gs_blob,bytes0)
+            bytes1=storage.path_to_bytes(tmp_gs_blob)
+            self.assertEqual(bytes0,bytes1)
+
     def test_http(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'RICFYWBCVI')
             tmp_path = 'https://httpbin.org/get'
             storage.path_to_local(tmp_filename,tmp_path)
             data = futsu.json.file_to_data(tmp_filename)
+            self.assertEqual(data['url'],tmp_path)
+
+            data = storage.path_to_bytes(tmp_path)
+            data = json.loads(data)
             self.assertEqual(data['url'],tmp_path)
