@@ -56,6 +56,12 @@ def string_to_blob(dst,s,client):
 def blob_to_string(src,client):
     return blob(src, client).download_as_string().decode('utf8')
 
+def bytes_to_blob(dst,s,client):
+    blob(dst, client).upload_from_string(s)
+
+def blob_to_bytes(src,client):
+    return blob(src, client).download_as_string()
+
 def is_blob_exist(path,client):
     return blob(path, client).exists()
 

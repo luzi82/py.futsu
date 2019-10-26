@@ -60,6 +60,15 @@ class TestStorage(TestCase):
         s = fstorage.blob_to_string(tmp_gs_path,client)
         self.assertEqual(s,'JLPUSLMIHV')
 
+    def test_gcp_bytes(self):
+        timestamp = int(time.time())
+        tmp_gs_path  = 'gs://futsu-test/test-SCALNUVEVQ-{0}'.format(timestamp)
+
+        client = gcstorage.client.Client()
+        fstorage.bytes_to_blob(tmp_gs_path,b'VUOUWXZNIA',client)
+        s = fstorage.blob_to_bytes(tmp_gs_path,client)
+        self.assertEqual(s,b'VUOUWXZNIA')
+
     def test_gcp_file(self):
         client = gcstorage.client.Client()
         with tempfile.TemporaryDirectory() as tempdir:
