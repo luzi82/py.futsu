@@ -21,3 +21,20 @@ class TestJson(TestCase):
             
             data = fjson.file_to_data(tmp_filename)
             self.assertEqual(data,{'qwer':'asdf'})
+
+    def test_path_to_data(self):
+        data = fjson.path_to_data(os.path.join('futsu','test','test_json_0.json'))
+        self.assertEqual(data,{'qwer':'asdf'})
+
+    def test_data_to_path(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename = os.path.join(tempdir,'KRUAWCYH')
+
+            self.assertFalse(os.path.isfile(tmp_filename))
+
+            data={'qwer':'asdf'}
+            fjson.data_to_path(tmp_filename, data)
+            self.assertTrue(os.path.isfile(tmp_filename))
+            
+            data = fjson.path_to_data(tmp_filename)
+            self.assertEqual(data,{'qwer':'asdf'})

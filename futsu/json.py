@@ -1,5 +1,15 @@
+import lazy_import
 import json
-import warnings
+warnings = lazy_import.lazy_module('warnings')
+fstorage = lazy_import.lazy_module('futsu.storage')
+
+def path_to_data(path):
+    bytes = fstorage.path_to_bytes(path)
+    return json.loads(bytes)
+
+def data_to_path(path, data):
+    bytes = json.dumps(data,sort_keys=True,indent=2).encode('utf-8')
+    fstorage.bytes_to_path(path, bytes)
 
 def file_to_data(fn):
     with open(fn,'r') as fin:
