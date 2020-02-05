@@ -45,6 +45,8 @@ deactivate
 
 # short output
 
+source venv/bin/activate
+
    rm -rf dist \
 && python3 setup.py test \
 && python3 setup.py sdist bdist_wheel \
