@@ -45,6 +45,9 @@ deactivate
 
 # short output
 
+# update version in setup.py
+
+export GOOGLE_APPLICATION_CREDENTIALS=${PWD}/key/futsu-4bc2f6db1c50.json
 source venv/bin/activate
 
    rm -rf dist \

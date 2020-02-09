@@ -14,9 +14,14 @@ class TestStorge(TestCase):
             tmp_filename = os.path.join(tempdir,'QKDQXVOOME')
             src_file = os.path.join('futsu','test','test_storage_0.txt')
             
-            storage.local_to_path(tmp_filename,src_file)
+            self.assertFalse(storage.is_blob_exist(tmp_filename))
             
+            storage.local_to_path(tmp_filename,src_file)
+            self.assertTrue(storage.is_blob_exist(tmp_filename))
             self.assertFalse(fs.diff(tmp_filename,src_file))
+
+            storage.rm(tmp_filename)
+            self.assertFalse(storage.is_blob_exist(tmp_filename))
             
             tmp_filename = os.path.join(tempdir,'NKNVMMYPUI')
             bytes0=b'YENLUMVECW'
@@ -30,11 +35,17 @@ class TestStorge(TestCase):
             src_file = os.path.join('futsu','test','test_storage_0.txt')
             timestamp = int(time.time())
             tmp_gs_blob = 'gs://futsu-test/test-NXMUHBDEMR-{0}'.format(timestamp)
+
+            self.assertFalse(storage.is_blob_exist(tmp_gs_blob))
             
             storage.local_to_path(tmp_gs_blob,src_file)
+            self.assertTrue(storage.is_blob_exist(tmp_gs_blob))
+
             storage.path_to_local(tmp_filename,tmp_gs_blob)
-            
             self.assertFalse(fs.diff(tmp_filename,src_file))
+
+            storage.rm(tmp_gs_blob)
+            self.assertFalse(storage.is_blob_exist(tmp_gs_blob))
 
             tmp_gs_blob = 'gs://futsu-test/test-DQZFYPFNUV-{0}'.format(timestamp)
             bytes0=b'RZCPRGZZBC'
@@ -48,11 +59,17 @@ class TestStorge(TestCase):
             src_file = os.path.join('futsu','test','test_storage_0.txt')
             timestamp = int(time.time())
             tmp_path = 's3://futsu-test/test-KWPIYZVIYK-{0}'.format(timestamp)
+
+            self.assertFalse(storage.is_blob_exist(tmp_path))
             
             storage.local_to_path(tmp_path,src_file)
+            self.assertTrue(storage.is_blob_exist(tmp_path))
+
             storage.path_to_local(tmp_filename,tmp_path)
-            
             self.assertFalse(fs.diff(tmp_filename,src_file))
+
+            storage.rm(tmp_path)
+            self.assertFalse(storage.is_blob_exist(tmp_path))
 
             tmp_gs_blob = 's3://futsu-test/test-LKUDEBPHEF-{0}'.format(timestamp)
             bytes0=b'SUZODZKFXW'

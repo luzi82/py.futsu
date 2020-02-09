@@ -5,6 +5,7 @@ fs3 = lazy_import.lazy_module('futsu.aws.s3')
 ffs = lazy_import.lazy_module('futsu.fs')
 urllib_request = lazy_import.lazy_module('urllib.request')
 shutil = lazy_import.lazy_module('shutil')
+import os
 
 def local_to_path(dst, src):
     if fgcpstorage.is_blob_path(dst):
@@ -54,3 +55,21 @@ def path_to_bytes(src):
         with urllib_request.urlopen(src) as w_in:
             return w_in.read()
     return ffs.file_to_bytes(src)
+
+def is_blob_exist(p):
+    if fgcpstorage.is_blob_path(p):
+        gcs_client = gcstorage.client.Client()
+        return fgcpstorage.is_blob_exist(p,gcs_client)
+    if fs3.is_blob_path(p):
+        client = fs3.create_client()
+        return fs3.is_blob_exist(p, client)
+    return os.path.isfile(p)
+
+def rm(p):
+    if fgcpstorage.is_blob_path(p):
+        gcs_client = gcstorage.client.Client()
+        return fgcpstorage.blob_rm(p, gcs_client)
+    if fs3.is_blob_path(p):
+        client = fs3.create_client()
+        return fs3.blob_rm(p, client)
+    return os.remove(p)
