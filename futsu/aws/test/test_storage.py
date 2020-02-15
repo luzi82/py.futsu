@@ -130,3 +130,16 @@ class TestStorage(TestCase):
             # should run ok
             ffstorage.path_to_local(tmp_filename,tmp_http_path)
             self.assertFalse(ffs.diff(src_fn,tmp_filename))
+
+    def test_find_blob_itr(self):
+        client = fstorage.create_client()
+        timestamp = int(time.time())
+        tmp_gs_path_list = ['s3://futsu-test/test-JJLVOWMQ-{0}/{1}'.format(timestamp,i) for i in range(10)]
+        for tmp_gs_path in tmp_gs_path_list:
+            fstorage.bytes_to_blob(tmp_gs_path,b'ZPMSMMAU',client)
+
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client)
+        blob_list = list(blob_list)
+        self.assertEqual(len(blob_list), 10)
+        blob_list = sorted(blob_list)
+        self.assertEqual(blob_list, tmp_gs_path_list)

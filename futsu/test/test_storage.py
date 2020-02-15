@@ -29,6 +29,15 @@ class TestStorge(TestCase):
             bytes1=storage.path_to_bytes(tmp_filename)
             self.assertEqual(bytes0,bytes1)
 
+            tmp_root_path = os.path.join(tempdir,'BDHYVQKO')
+            fs.makedirs(tmp_root_path)
+            tmp_path_list = [ os.path.join(tmp_root_path,'{0}'.format(i)) for i in range(10)]
+            for tmp_path in tmp_path_list:
+                storage.bytes_to_path(tmp_path, b'')
+            ret_path_list = storage.find(tmp_root_path)
+            ret_path_list = sorted(list(ret_path_list))
+            self.assertEqual(ret_path_list, tmp_path_list)
+
     def test_gcp(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'GPVRUHXTTC')
@@ -53,6 +62,13 @@ class TestStorge(TestCase):
             bytes1=storage.path_to_bytes(tmp_gs_blob)
             self.assertEqual(bytes0,bytes1)
 
+            tmp_path_list = [ 'gs://futsu-test/test-NKMYDMGJ-{0}/{1}'.format(timestamp,i) for i in range(10)]
+            for tmp_path in tmp_path_list:
+                storage.bytes_to_path(tmp_path, b'')
+            ret_path_list = storage.find('gs://futsu-test/test-NKMYDMGJ-{0}/'.format(timestamp))
+            ret_path_list = sorted(list(ret_path_list))
+            self.assertEqual(ret_path_list, tmp_path_list)
+
     def test_s3(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'TMWGHOKDRE')
@@ -76,6 +92,13 @@ class TestStorge(TestCase):
             storage.bytes_to_path(tmp_gs_blob,bytes0)
             bytes1=storage.path_to_bytes(tmp_gs_blob)
             self.assertEqual(bytes0,bytes1)
+
+            tmp_path_list = [ 's3://futsu-test/test-SVABRZZM-{0}/{1}'.format(timestamp,i) for i in range(10)]
+            for tmp_path in tmp_path_list:
+                storage.bytes_to_path(tmp_path, b'')
+            ret_path_list = storage.find('s3://futsu-test/test-SVABRZZM-{0}/'.format(timestamp))
+            ret_path_list = sorted(list(ret_path_list))
+            self.assertEqual(ret_path_list, tmp_path_list)
 
     def test_http(self):
         with tempfile.TemporaryDirectory() as tempdir:

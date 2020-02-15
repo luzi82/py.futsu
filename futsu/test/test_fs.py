@@ -86,3 +86,15 @@ class TestFs(TestCase):
             fs.bytes_to_file(tmp_filename, 'UIIUAZUNNF'.encode('utf-8'))
             txt = fs.file_to_bytes(tmp_filename).decode('utf-8')
             self.assertEqual(txt,'UIIUAZUNNF')
+
+    def test_find_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_filename_list = [ os.path.join(tempdir,'ISEZHQOQ-{0}'.format(i)) for i in range(10)]
+            for tmp_filename in tmp_filename_list:
+                fs.bytes_to_file(tmp_filename, b'')
+            
+            file_list = fs.find_file(tempdir)
+            file_list = list(file_list)
+            self.assertEqual(len(file_list), 10)
+            file_list = sorted(file_list)
+            self.assertEqual(file_list, tmp_filename_list)

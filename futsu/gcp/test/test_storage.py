@@ -109,3 +109,16 @@ class TestStorage(TestCase):
         fstorage.blob_rm(tmp_gs_path,client)
 
         self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
+
+    def test_find_blob_itr(self):
+        client = gcstorage.client.Client()
+        timestamp = int(time.time())
+        tmp_gs_path_list = ['gs://futsu-test/test-QMKOGJVS-{0}/{1}'.format(timestamp,i) for i in range(10)]
+        for tmp_gs_path in tmp_gs_path_list:
+            fstorage.bytes_to_blob(tmp_gs_path,b'TBJSUSIE',client)
+
+        blob_list = fstorage.find_blob_itr('gs://futsu-test/test-QMKOGJVS-{0}/'.format(timestamp), client)
+        blob_list = list(blob_list)
+        self.assertEqual(len(blob_list), 10)
+        blob_list = sorted(blob_list)
+        self.assertEqual(blob_list, tmp_gs_path_list)

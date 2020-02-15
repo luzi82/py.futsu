@@ -73,3 +73,12 @@ def rm(p):
         client = fs3.create_client()
         return fs3.blob_rm(p, client)
     return os.remove(p)
+
+def find(p):
+    if fgcpstorage.is_blob_path(p):
+        gcs_client = gcstorage.client.Client()
+        return fgcpstorage.find_blob_itr(p, gcs_client)
+    if fs3.is_blob_path(p):
+        client = fs3.create_client()
+        return fs3.find_blob_itr(p, client)
+    return ffs.find_file(p)

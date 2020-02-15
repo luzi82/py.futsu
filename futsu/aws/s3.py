@@ -123,3 +123,13 @@ def set_blob_acl(path, acl, client):
         Key = object_key,
         ACL = acl,
     )
+
+def find_blob_itr(prefix, client):
+    bucket_name, object_key = prase_blob_path(prefix)
+    ret = client.list_objects_v2(
+        Bucket = bucket_name,
+        Prefix = object_key
+    )
+    ret = ret['Contents']
+    ret = map(lambda i:'s3://{}/{}'.format(bucket_name, i['Key']), ret)
+    return ret

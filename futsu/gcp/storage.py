@@ -69,3 +69,9 @@ def blob_rm(path,client):
     b = blob(path, client)
     if b.exists():
         b.delete()
+
+def find_blob_itr(prefix, client):
+    bucket_name, blob_name = prase_blob_path(prefix)
+    itr = client.list_blobs(bucket_name, prefix=blob_name)
+    itr = map(lambda i:'gs://{}/{}'.format(bucket_name,i.name), itr)
+    return itr
