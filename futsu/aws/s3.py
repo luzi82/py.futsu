@@ -124,12 +124,25 @@ def set_blob_acl(path, acl, client):
         ACL = acl,
     )
 
-def find_blob_itr(prefix, client):
+def find_blob_itr(prefix, client, **kwargs):
     bucket_name, object_key = prase_blob_path(prefix)
-    ret = client.list_objects_v2(
-        Bucket = bucket_name,
-        Prefix = object_key
-    )
-    ret = ret['Contents']
-    ret = map(lambda i:'s3://{}/{}'.format(bucket_name, i['Key']), ret)
-    return ret
+    continuationtoken = None
+    my_kwargs = {}
+    while True:
+        my_kwargs = {}
+        if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
+        ret_list = client.list_objects_v2(
+            Bucket = bucket_name,
+            Prefix = object_key,
+            **kwargs,
+            **my_kwargs,
+        )
+        continuationtoken = ret_list['NextContinuationToken'] if ('NextContinuationToken' in ret_list) else \
+                            None
+        if 'Contents' in ret_list:
+            ret_list = ret_list['Contents']
+            ret_list = map(lambda i:'s3://{}/{}'.format(bucket_name, i['Key']), ret_list)
+            for ret in ret_list:
+                yield ret
+        if continuationtoken is None:
+            break

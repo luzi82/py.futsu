@@ -143,3 +143,19 @@ class TestStorage(TestCase):
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
         self.assertEqual(blob_list, tmp_gs_path_list)
+
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client, MaxKeys=5)
+        blob_list = list(blob_list)
+        self.assertEqual(len(blob_list), 10)
+        blob_list = sorted(blob_list)
+        self.assertEqual(blob_list, tmp_gs_path_list)
+
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client, MaxKeys=20)
+        blob_list = list(blob_list)
+        self.assertEqual(len(blob_list), 10)
+        blob_list = sorted(blob_list)
+        self.assertEqual(blob_list, tmp_gs_path_list)
+
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-HPYHCAMK-{0}/'.format(timestamp), client)
+        blob_list = list(blob_list)
+        self.assertEqual(len(blob_list), 0)
