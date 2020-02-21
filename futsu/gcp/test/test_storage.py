@@ -1,5 +1,5 @@
 from unittest import TestCase
-import futsu.gcp.storage as fstorage
+from futsu.gcp import storage as fstorage
 import futsu.fs as ffs
 import tempfile
 import os

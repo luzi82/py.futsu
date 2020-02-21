@@ -109,5 +109,5 @@ class TestStorge(TestCase):
             self.assertEqual(data['url'],tmp_path)
 
             data = storage.path_to_bytes(tmp_path)
-            data = json.loads(data)
+            data = json.loads(data.decode('utf-8'))
             self.assertEqual(data['url'],tmp_path)

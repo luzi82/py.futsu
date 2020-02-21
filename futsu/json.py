@@ -5,7 +5,7 @@ fstorage = lazy_import.lazy_module('futsu.storage')
 
 def path_to_data(path):
     bytes = fstorage.path_to_bytes(path)
-    return json.loads(bytes)
+    return json.loads(bytes.decode('utf-8'))
 
 def data_to_path(path, data):
     bytes = (json.dumps(data,sort_keys=True,indent=2)+'\n').encode('utf-8')
