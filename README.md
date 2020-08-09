@@ -10,14 +10,15 @@ https://github.com/luzi82/py.futsu
 ## Cheat sheet
 
 ```
+gcloud auth login
 gcloud config configurations create futsu
-gcloud config set project futsu
+gcloud config set project futsu-242513
 export GOOGLE_APPLICATION_CREDENTIALS=${PWD}/key/futsu-4bc2f6db1c50.json
 
 virtualenv --python python3 venv
 source venv/bin/activate
 
-pip install --upgrade pip
+pip install --upgrade pip wheel
 pip install --upgrade setuptools wheel nose twine keyring google-cloud-storage boto3 lazy-import
 
 keyring set https://upload.pypi.org/legacy/ luzi82
