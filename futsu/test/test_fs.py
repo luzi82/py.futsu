@@ -98,3 +98,91 @@ class TestFs(TestCase):
             self.assertEqual(len(file_list), 10)
             file_list = sorted(file_list)
             self.assertEqual(file_list, tmp_filename_list)
+
+    def test_is_dir(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_path = os.path.join(tempdir,'ELCAWJBE')
+            self.assertFalse(fs.is_dir(tmp_path))
+            fs.makedirs(tmp_path)
+            self.assertTrue(fs.is_dir(tmp_path))
+
+            tmp_path = os.path.join(tempdir,'MATKBCNT')
+            self.assertFalse(fs.is_dir(tmp_path))
+            fs.bytes_to_file(tmp_path,b'')
+            self.assertFalse(fs.is_dir(tmp_path))
+
+    def test_is_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_path = os.path.join(tempdir,'AMBLRDNO')
+            self.assertFalse(fs.is_file(tmp_path))
+            fs.makedirs(tmp_path)
+            self.assertFalse(fs.is_file(tmp_path))
+
+            tmp_path = os.path.join(tempdir,'XCYMJDNI')
+            self.assertFalse(fs.is_file(tmp_path))
+            fs.bytes_to_file(tmp_path,b'')
+            self.assertTrue(fs.is_file(tmp_path))
+
+    def test_is_exist(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tmp_path = os.path.join(tempdir,'XWYPDSVT')
+            self.assertFalse(fs.is_exist(tmp_path))
+            fs.makedirs(tmp_path)
+            self.assertTrue(fs.is_exist(tmp_path))
+
+            tmp_path = os.path.join(tempdir,'MRAMKBJC')
+            self.assertFalse(fs.is_exist(tmp_path))
+            fs.bytes_to_file(tmp_path,b'')
+            self.assertTrue(fs.is_exist(tmp_path))
+
+    def test_rm_dir(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            # rm not exist
+            tmp_path = os.path.join(tempdir,'HYVPLFZA')
+            fs.rm_dir(tmp_path)
+            
+            # rm dir
+            tmp_path = os.path.join(tempdir,'RLZIEDFY')
+            fs.makedirs(tmp_path)
+            fs.rm_dir(tmp_path)
+            self.assertFalse(fs.is_dir(tmp_path))
+            
+            # rm file
+            tmp_path = os.path.join(tempdir,'KQDGCKDS')
+            fs.bytes_to_file(tmp_path,b'')
+            self.assertRaises(ValueError, fs.rm_dir, tmp_path)
+
+    def test_rm_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            # rm not exist
+            tmp_path = os.path.join(tempdir,'DBSJBLOD')
+            fs.rm_file(tmp_path)
+            
+            # rm dir
+            tmp_path = os.path.join(tempdir,'TXZGCGFO')
+            fs.makedirs(tmp_path)
+            self.assertRaises(ValueError, fs.rm_file, tmp_path)
+            
+            # rm file
+            tmp_path = os.path.join(tempdir,'NUFIPTJA')
+            fs.bytes_to_file(tmp_path,b'')
+            fs.rm_file(tmp_path)
+            self.assertFalse(fs.is_file(tmp_path))
+
+    def test_rm(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            # rm not exist
+            tmp_path = os.path.join(tempdir,'UFIUJLKN')
+            fs.rm_file(tmp_path)
+            
+            # rm dir
+            tmp_path = os.path.join(tempdir,'JMGSKISO')
+            fs.makedirs(tmp_path)
+            fs.rm_dir(tmp_path)
+            self.assertFalse(fs.is_dir(tmp_path))
+            
+            # rm file
+            tmp_path = os.path.join(tempdir,'RNNUTMLB')
+            fs.bytes_to_file(tmp_path,b'')
+            fs.rm_file(tmp_path)
+            self.assertFalse(fs.is_file(tmp_path))

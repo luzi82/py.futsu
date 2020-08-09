@@ -42,3 +42,30 @@ def find_file(dir):
         for file in files:
             file_list.append(os.path.join(root,file))
     return file_list
+
+is_dir = os.path.isdir
+
+is_file = os.path.isfile
+
+def is_exist(path):
+    return is_dir(path) or is_file(path)
+
+def rm_dir(path):
+    if is_file(path):
+        raise ValueError()
+    shutil.rmtree(path,ignore_errors=True)
+
+def rm_file(path):
+    if is_dir(path):
+        raise ValueError()
+    if not is_exist(path):
+        return
+    os.remove(path)
+
+def rm(path):
+    if is_dir(path):
+        rm_dir(path)
+        return
+    if is_file(path):
+        rm_file(path)
+        return
