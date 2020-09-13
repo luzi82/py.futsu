@@ -143,3 +143,15 @@ class TestStorage(TestCase):
     def test_join(self):
         self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX'),'gs://NARNEHCQ/UDGTMPFX')
         self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX','AFOCASQL'),'gs://NARNEHCQ/UDGTMPFX/AFOCASQL')
+
+    def test_split(self):
+        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX'),('gs://NARNEHCQ','UDGTMPFX'))
+        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),('gs://NARNEHCQ/UDGTMPFX','AFOCASQL'))
+
+    def test_dirname(self):
+        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX'),'gs://NARNEHCQ')
+        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),'gs://NARNEHCQ/UDGTMPFX')
+
+    def test_basename(self):
+        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX'),'UDGTMPFX')
+        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),'AFOCASQL')

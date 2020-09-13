@@ -81,3 +81,12 @@ def find_blob_itr(prefix, client):
 
 def join(*args):
     return '/'.join(args)
+
+def split(p):
+    return (dirname(p),basename(p))
+
+def dirname(p):
+    return p[:p.rindex('/')]
+
+def basename(p):
+    return p[p.rindex('/')+1:]
