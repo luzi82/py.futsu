@@ -43,6 +43,23 @@ class TestStorage(TestCase):
         self.assertFalse(fstorage.is_blob_path('s3:///'))
         self.assertFalse(fstorage.is_blob_path('s3:///asdf'))
 
+    def test_is_path(self):
+        self.assertTrue(fstorage.is_path('s3://bucket'))
+        self.assertTrue(fstorage.is_path('s3://bucket/'))
+
+        self.assertTrue(fstorage.is_path('s3://bucket//'))
+        self.assertTrue(fstorage.is_path('s3://bucket/asdf'))
+        self.assertTrue(fstorage.is_path('s3://bucket/asdf/'))
+        self.assertTrue(fstorage.is_path('s3://bucket/asdf/asdf'))
+
+        self.assertFalse(fstorage.is_path('s://bucket'))
+        self.assertFalse(fstorage.is_path('3://bucket'))
+        self.assertFalse(fstorage.is_path('s3//bucket'))
+        self.assertFalse(fstorage.is_path('s3:/bucket'))
+        self.assertFalse(fstorage.is_path('s3://'))
+        self.assertFalse(fstorage.is_path('s3:///'))
+        self.assertFalse(fstorage.is_path('s3:///asdf'))
+
     def test_parse_bucket_path(self):
         self.assertEqual(fstorage.prase_bucket_path('s3://asdf'),'asdf')
         self.assertRaises(ValueError,fstorage.prase_bucket_path,'asdf')
@@ -159,3 +176,7 @@ class TestStorage(TestCase):
         blob_list = fstorage.find_blob_itr('s3://futsu-test/test-HPYHCAMK-{0}/'.format(timestamp), client)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 0)
+
+    def test_join(self):
+        self.assertEqual(fstorage.join('s3://NARNEHCQ','UDGTMPFX'),'s3://NARNEHCQ/UDGTMPFX')
+        self.assertEqual(fstorage.join('s3://NARNEHCQ','UDGTMPFX','AFOCASQL'),'s3://NARNEHCQ/UDGTMPFX/AFOCASQL')

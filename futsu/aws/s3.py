@@ -27,6 +27,9 @@ def is_blob_path(path):
     init_BLOB_PATH_FORMAT_RE()
     return BLOB_PATH_FORMAT_RE.fullmatch(path) is not None
 
+def is_path(path):
+    return is_bucket_path(path) or is_blob_path(path)
+
 def prase_bucket_path(path):
     init_BUCKET_PATH_FORMAT_RE()
     m = BUCKET_PATH_FORMAT_RE.fullmatch(path)
@@ -146,3 +149,6 @@ def find_blob_itr(prefix, client, **kwargs):
                 yield ret
         if continuationtoken is None:
             break
+
+def join(*args):
+    return '/'.join(args)
