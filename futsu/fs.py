@@ -32,6 +32,9 @@ def file_to_bytes(fn):
         return fin.read()
 
 def bytes_to_file(fn, bytes):
+    dirname = os.path.dirname(fn)
+    if not is_dir(dirname):
+        makedirs(dirname)
     with open(fn, mode='wb') as fout:
         fout.write(bytes)
 

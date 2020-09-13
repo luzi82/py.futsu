@@ -25,7 +25,7 @@ keyring set https://upload.pypi.org/legacy/ luzi82
 keyring set https://test.pypi.org/legacy/ luzi82
 
 python3 setup.py test
-# python3 setup.py test -m futsu.test.test_pathdb
+# python3 setup.py test -s futsu.test.test_pathdb
 
 rm -rf dist
 python3 setup.py sdist bdist_wheel
