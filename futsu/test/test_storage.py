@@ -7,7 +7,7 @@ import time
 import futsu.json
 import json
 
-class TestStorge(TestCase):
+class TestStorage(TestCase):
 
     def test_local(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -123,19 +123,3 @@ class TestStorge(TestCase):
             data = storage.path_to_bytes(tmp_path)
             data = json.loads(data.decode('utf-8'))
             self.assertEqual(data['url'],tmp_path)
-
-    #def test_gcp_is_blob_path(
-
-    def test_local_join(self):
-        with tempfile.TemporaryDirectory() as tempdir:
-            self.assertEqual(storage.join(tempdir,'GMJZWWTM'),os.path.join(tempdir,'GMJZWWTM'))
-
-    def test_gcp_join(self):
-        self.assertEqual(storage.join('gs://DHLQJSEX','PFMSXIDP'),'gs://DHLQJSEX/PFMSXIDP')
-
-    def test_s3_join(self):
-        self.assertEqual(storage.join('s3://PISXTKBK','EIQDPMWQ'),'s3://PISXTKBK/EIQDPMWQ')
-
-    def test_http_join(self):
-        self.assertEqual(storage.join('http://UHMNFEYK','XFGBYFFR'),'http://UHMNFEYK/XFGBYFFR')
-        self.assertEqual(storage.join('https://UHMNFEYK','XFGBYFFR'),'https://UHMNFEYK/XFGBYFFR')

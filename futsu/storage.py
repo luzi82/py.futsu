@@ -91,3 +91,30 @@ def join(*args):
     if args[0].startswith('https://') or args[0].startswith('http://'):
         return '/'.join(args)
     return os.path.join(*args)
+
+def split(p):
+    if fgcpstorage.is_path(p):
+        return fgcpstorage.split(p)
+    if fs3.is_path(p):
+        return fs3.split(p)
+    if p.startswith('https://') or p.startswith('http://'):
+        return (dirname(p),basename(p))
+    return os.path.split(p)
+
+def basename(p):
+    if fgcpstorage.is_path(p):
+        return fgcpstorage.basename(p)
+    if fs3.is_path(p):
+        return fs3.basename(p)
+    if p.startswith('https://') or p.startswith('http://'):
+        return p[p.rindex('/')+1:]
+    return os.path.basename(p)
+
+def dirname(p):
+    if fgcpstorage.is_path(p):
+        return fgcpstorage.dirname(p)
+    if fs3.is_path(p):
+        return fs3.dirname(p)
+    if p.startswith('https://') or p.startswith('http://'):
+        return p[:p.rindex('/')]
+    return os.path.dirname(p)
