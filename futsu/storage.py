@@ -82,3 +82,12 @@ def find(p):
         client = fs3.create_client()
         return fs3.find_blob_itr(p, client)
     return ffs.find_file(p)
+
+def join(*args):
+    if fgcpstorage.is_path(args[0]):
+        return fgcpstorage.join(*args)
+    if fs3.is_path(args[0]):
+        return fs3.join(*args)
+    if args[0].startswith('https://') or args[0].startswith('http://'):
+        return '/'.join(args)
+    return os.path.join(*args)
