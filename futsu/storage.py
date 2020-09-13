@@ -27,7 +27,7 @@ def path_to_local(dst, src):
         client = fs3.create_client()
         fs3.blob_to_file(dst, src, client)
         return
-    if src.startswith('https://') or src.endswith('http://'):
+    if src.startswith('https://') or src.startswith('http://'):
         with urllib_request.urlopen(src) as w_in, open(dst, 'wb') as f_out:
             shutil.copyfileobj(w_in, f_out)
         return
@@ -51,7 +51,7 @@ def path_to_bytes(src):
     if fs3.is_blob_path(src):
         client = fs3.create_client()
         return fs3.blob_to_bytes(src, client)
-    if src.startswith('https://') or src.endswith('http://'):
+    if src.startswith('https://') or src.startswith('http://'):
         with urllib_request.urlopen(src) as w_in:
             return w_in.read()
     return ffs.file_to_bytes(src)
