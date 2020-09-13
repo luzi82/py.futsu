@@ -42,6 +42,23 @@ class TestStorage(TestCase):
         self.assertFalse(fstorage.is_blob_path('gs:///'))
         self.assertFalse(fstorage.is_blob_path('gs:///asdf'))
 
+    def test_is_path(self):
+        self.assertTrue(fstorage.is_path('gs://bucket'))
+        self.assertTrue(fstorage.is_path('gs://bucket/'))
+
+        self.assertTrue(fstorage.is_path('gs://bucket//'))
+        self.assertTrue(fstorage.is_path('gs://bucket/asdf'))
+        self.assertTrue(fstorage.is_path('gs://bucket/asdf/'))
+        self.assertTrue(fstorage.is_path('gs://bucket/asdf/asdf'))
+
+        self.assertFalse(fstorage.is_path('s://bucket'))
+        self.assertFalse(fstorage.is_path('g://bucket'))
+        self.assertFalse(fstorage.is_path('gs//bucket'))
+        self.assertFalse(fstorage.is_path('gs:/bucket'))
+        self.assertFalse(fstorage.is_path('gs://'))
+        self.assertFalse(fstorage.is_path('gs:///'))
+        self.assertFalse(fstorage.is_path('gs:///asdf'))
+
     def test_parse_bucket_path(self):
         self.assertEqual(fstorage.prase_bucket_path('gs://asdf'),'asdf')
         self.assertRaises(ValueError,fstorage.prase_bucket_path,'asdf')
