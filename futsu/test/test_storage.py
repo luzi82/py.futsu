@@ -103,7 +103,19 @@ class TestStorge(TestCase):
     def test_http(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir,'RICFYWBCVI')
+
             tmp_path = 'https://httpbin.org/get'
+
+            storage.path_to_local(tmp_filename,tmp_path)
+            data = futsu.json.file_to_data(tmp_filename)
+            self.assertEqual(data['url'],tmp_path)
+
+            data = storage.path_to_bytes(tmp_path)
+            data = json.loads(data.decode('utf-8'))
+            self.assertEqual(data['url'],tmp_path)
+
+            tmp_path = 'http://httpbin.org/get'
+
             storage.path_to_local(tmp_filename,tmp_path)
             data = futsu.json.file_to_data(tmp_filename)
             self.assertEqual(data['url'],tmp_path)
