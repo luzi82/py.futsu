@@ -139,3 +139,7 @@ class TestStorage(TestCase):
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
         self.assertEqual(blob_list, tmp_gs_path_list)
+
+    def test_join(self):
+        self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX'),'gs://NARNEHCQ/UDGTMPFX')
+        self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX','AFOCASQL'),'gs://NARNEHCQ/UDGTMPFX/AFOCASQL')
