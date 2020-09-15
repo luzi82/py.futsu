@@ -201,22 +201,26 @@ class TestStorage(TestCase):
         path000 = fstorage.join(path00,'WKBXFDTH','CMCXBJYN')
         path001 = fstorage.join(path00,'MGNZJTXL','RGWIYPEG')
         path01  = fstorage.join(path0,'GMZSNRPD','UOAUKUKG','VJUOXIQY')
+        path02 = fstorage.join(path0,'ITGDLUVBx')
         
         s3_client = fstorage.create_client()
         
         fstorage.bytes_to_blob(path000,b'',s3_client)
         fstorage.bytes_to_blob(path001,b'',s3_client)
         fstorage.bytes_to_blob(path01,b'',s3_client)
+        fstorage.bytes_to_blob(path02,b'',s3_client)
         
         self.assertTrue(fstorage.is_blob_exist(path000,s3_client))
         self.assertTrue(fstorage.is_blob_exist(path001,s3_client))
         self.assertTrue(fstorage.is_blob_exist(path01,s3_client))
+        self.assertTrue(fstorage.is_blob_exist(path02,s3_client))
         
         fstorage.rmtree(path00,s3_client)
         
         self.assertFalse(fstorage.is_blob_exist(path000,s3_client))
         self.assertFalse(fstorage.is_blob_exist(path001,s3_client))
         self.assertTrue(fstorage.is_blob_exist(path01,s3_client))
+        self.assertTrue(fstorage.is_blob_exist(path02,s3_client))
 
     @unittest.skip("fat case")
     def test_rmtree_big(self):
