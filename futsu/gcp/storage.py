@@ -90,3 +90,9 @@ def dirname(p):
 
 def basename(p):
     return p[p.rindex('/')+1:]
+
+def rmtree(prefix, client):
+    bucket_name, blob_name = prase_blob_path(f'{prefix}/')
+    itr = client.list_blobs(bucket_name, prefix=blob_name)
+    for blob in itr:
+        blob.delete()
