@@ -90,6 +90,11 @@ class Q:
             futsu.storage.bytes_to_path(index_row_path,b'')
 
     def rm(self):
+        # handle del all
+        if len(self._condition_dict) <= 0:
+            futsu.storage.rmtree(futsu.storage.join(self._database._path,'table_set',self._table_name))
+            return
+
         # get rm row uuid list
         index_row_uuid_list = list(self._get_best_index_row_uuid_itr())
         row_data_list = list(map(self._get_row_data,index_row_uuid_list))
