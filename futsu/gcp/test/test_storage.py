@@ -155,3 +155,32 @@ class TestStorage(TestCase):
     def test_basename(self):
         self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX'),'UDGTMPFX')
         self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),'AFOCASQL')
+
+    def test_rmtree(self):
+        timestamp = int(time.time())
+        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path00 = fstorage.join(path0,'ITGDLUVB')
+        path000 = fstorage.join(path00,'WKBXFDTH','CMCXBJYN')
+        path001 = fstorage.join(path00,'MGNZJTXL','RGWIYPEG')
+        path01  = fstorage.join(path0,'GMZSNRPD','UOAUKUKG','VJUOXIQY')
+        path02 = fstorage.join(path0,'ITGDLUVBx')
+        
+        gcs_client = gcstorage.client.Client()
+        
+        fstorage.bytes_to_blob(path000,b'',gcs_client)
+        fstorage.bytes_to_blob(path001,b'',gcs_client)
+        fstorage.bytes_to_blob(path01,b'',gcs_client)
+        fstorage.bytes_to_blob(path02,b'',gcs_client)
+        
+        self.assertTrue(fstorage.is_blob_exist(path000,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path001,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path01,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path02,gcs_client))
+        
+        fstorage.rmtree(path00,gcs_client)
+        
+        self.assertFalse(fstorage.is_blob_exist(path000,gcs_client))
+        self.assertFalse(fstorage.is_blob_exist(path001,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path01,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path02,gcs_client))
+        
