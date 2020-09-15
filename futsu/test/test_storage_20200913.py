@@ -70,4 +70,61 @@ class TestStorage(TestCase):
     def test_http_dirname(self):
         self.assertEqual(storage.dirname('http://UHMNFEYK/XFGBYFFR'),'http://UHMNFEYK')
         self.assertEqual(storage.dirname('https://UHMNFEYK/XFGBYFFR'),'https://UHMNFEYK')
+
+
+    def test_local_rmtree(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            path0 = storage.join(tempdir,'XMTLIIPP')
+            path00 = storage.join(path0,'WKBXFDTH','CMCXBJYN')
+            path01 = storage.join(path0,'MGNZJTXL','RGWIYPEG')
+            
+            storage.bytes_to_path(path00,b'')
+            storage.bytes_to_path(path01,b'')
+            
+            self.assertTrue(storage.is_blob_exist(path00))
+            self.assertTrue(storage.is_blob_exist(path01))
+            
+            storage.rmtree(path0)
+            
+            self.assertFalse(storage.is_blob_exist(path00))
+            self.assertFalse(storage.is_blob_exist(path01))
+
+    def test_gcp_rmtree(self):
+        timestamp = int(time.time())
+        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path00 = storage.join(path0,'WKBXFDTH','CMCXBJYN')
+        path01 = storage.join(path0,'MGNZJTXL','RGWIYPEG')
         
+        storage.bytes_to_path(path00,b'')
+        storage.bytes_to_path(path01,b'')
+        
+        self.assertTrue(storage.is_blob_exist(path00))
+        self.assertTrue(storage.is_blob_exist(path01))
+        
+        storage.rmtree(path0)
+        
+        self.assertFalse(storage.is_blob_exist(path00))
+        self.assertFalse(storage.is_blob_exist(path01))
+
+    def test_s3_rmtree(self):
+        timestamp = int(time.time())
+        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path00 = storage.join(path0,'WKBXFDTH','CMCXBJYN')
+        path01 = storage.join(path0,'MGNZJTXL','RGWIYPEG')
+        
+        storage.bytes_to_path(path00,b'')
+        storage.bytes_to_path(path01,b'')
+        
+        self.assertTrue(storage.is_blob_exist(path00))
+        self.assertTrue(storage.is_blob_exist(path01))
+        
+        storage.rmtree(path0)
+        
+        self.assertFalse(storage.is_blob_exist(path00))
+        self.assertFalse(storage.is_blob_exist(path01))
+
+    def test_http_rmtree(self):
+        with self.assertRaises(Exception):
+            storage.rmtree('https://httpbin.org/get')
+        with self.assertRaises(Exception):
+            storage.rmtree('http://httpbin.org/get')
