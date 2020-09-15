@@ -1,3 +1,4 @@
+import unittest
 from unittest import TestCase
 import futsu.aws.s3 as fstorage
 import futsu.fs as ffs
@@ -192,3 +193,52 @@ class TestStorage(TestCase):
     def test_basename(self):
         self.assertEqual(fstorage.basename('s3://NARNEHCQ/UDGTMPFX'),'UDGTMPFX')
         self.assertEqual(fstorage.basename('s3://NARNEHCQ/UDGTMPFX/AFOCASQL'),'AFOCASQL')
+
+    def test_rmtree(self):
+        timestamp = int(time.time())
+        path0 = f's3://futsu-test/test-HOSPFEUB-{timestamp}'
+        path00 = fstorage.join(path0,'ITGDLUVB')
+        path000 = fstorage.join(path00,'WKBXFDTH','CMCXBJYN')
+        path001 = fstorage.join(path00,'MGNZJTXL','RGWIYPEG')
+        path01  = fstorage.join(path0,'GMZSNRPD','UOAUKUKG','VJUOXIQY')
+        
+        s3_client = fstorage.create_client()
+        
+        fstorage.bytes_to_blob(path000,b'',s3_client)
+        fstorage.bytes_to_blob(path001,b'',s3_client)
+        fstorage.bytes_to_blob(path01,b'',s3_client)
+        
+        self.assertTrue(fstorage.is_blob_exist(path000,s3_client))
+        self.assertTrue(fstorage.is_blob_exist(path001,s3_client))
+        self.assertTrue(fstorage.is_blob_exist(path01,s3_client))
+        
+        fstorage.rmtree(path00,s3_client)
+        
+        self.assertFalse(fstorage.is_blob_exist(path000,s3_client))
+        self.assertFalse(fstorage.is_blob_exist(path001,s3_client))
+        self.assertTrue(fstorage.is_blob_exist(path01,s3_client))
+
+    @unittest.skip("fat case")
+    def test_rmtree_big(self):
+        timestamp = int(time.time())
+
+        s3_client = fstorage.create_client()
+
+        path0 = f's3://futsu-test/test-HOSPFEUB-{timestamp}'
+        for i in range(1234):
+            print(f'UQYFVDQC create {i}')
+            path00 = fstorage.join(path0,str(i))
+            fstorage.bytes_to_blob(path00,b'',s3_client)
+            self.assertTrue(fstorage.is_blob_exist(path00,s3_client))
+
+        self.assertEqual(len(list(fstorage.find_blob_itr(path0,s3_client))),1234)
+
+        print('TLWHHGHX rmtree')
+        fstorage.rmtree(path0,s3_client)
+
+        self.assertEqual(len(list(fstorage.find_blob_itr(path0,s3_client))),0)
+
+        for i in range(1234):
+            print(f'UQYFVDQC check {i}')
+            path00 = fstorage.join(path0,str(i))
+            self.assertFalse(fstorage.is_blob_exist(path00,s3_client))

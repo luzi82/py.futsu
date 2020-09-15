@@ -161,3 +161,35 @@ def dirname(p):
 
 def basename(p):
     return p[p.rindex('/')+1:]
+
+def rmtree(p,client):
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_objects
+    prefix = f'{p}/'
+    bucket_name, object_key = prase_blob_path(prefix)
+    continuationtoken = None
+    my_kwargs = {}
+    while True:
+        my_kwargs = {}
+        if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
+        ret_list = client.list_objects_v2(
+            Bucket = bucket_name,
+            Prefix = object_key,
+            **my_kwargs,
+        )
+        continuationtoken = ret_list['NextContinuationToken'] if ('NextContinuationToken' in ret_list) else \
+                            None
+        if 'Contents' in ret_list:
+            object_list = ret_list['Contents']
+            object_list = map(lambda i:{'Key':i['Key']},object_list)
+            object_list = list(object_list)
+            print(f'MVLWQTFX object_list={object_list}')
+            delete_ret = client.delete_objects(
+                Bucket = bucket_name,
+                Delete = {'Objects':object_list},
+            )
+            if delete_ret.get('Errors',[]):
+                raise Exception('FUJYOQJW '+str(delete_ret['Errors']))
+            if len(delete_ret['Deleted'])!=len(object_list):
+                raise Exception(f"YGNAUABR result-len={len(delete_ret['Deleted'])} expected-len={len(object_list)}")
+        if continuationtoken is None:
+            break
