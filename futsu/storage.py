@@ -118,3 +118,14 @@ def dirname(p):
     if p.startswith('https://') or p.startswith('http://'):
         return p[:p.rindex('/')]
     return os.path.dirname(p)
+
+def rmtree(p):
+    if fgcpstorage.is_path(p):
+        gcs_client = gcstorage.client.Client()
+        fgcpstorage.rmtree(p, gcs_client)
+    if fs3.is_path(p):
+        client = fs3.create_client()
+        fs3.rmtree(p, client)
+    if p.startswith('https://') or p.startswith('http://'):
+        raise Exception('CVALHPEH http(s) not support rmtree')
+    shutil.rmtree(p,ignore_errors=True)
