@@ -43,4 +43,4 @@ jobs:
       run: |
         pytest
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GITHUB_WORKSPACE }}/secret/futsu-4bc2f6db1c50.json
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.PWD }}/secret/futsu-4bc2f6db1c50.json
