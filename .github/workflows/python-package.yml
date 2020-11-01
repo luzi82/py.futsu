@@ -24,7 +24,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Decrpt secret
-      run: tasks/decrypt_secret.sh ${{ secrets.FUTSU_SECRET }}
+      run: tasks/decrypt_secret.sh 
+      env:
+        FUTSU_SECRET: ${{ secrets.FUTSU_SECRET }}
     - name: Init CI
       run: tasks/_init_ci.sh
     - name: Lint with flake8
