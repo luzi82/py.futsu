@@ -60,53 +60,53 @@ class TestStorage(TestCase):
         self.assertFalse(fstorage.is_path('gs:///asdf'))
 
     def test_parse_bucket_path(self):
-        self.assertEqual(fstorage.prase_bucket_path('gs://asdf'),'asdf')
-        self.assertRaises(ValueError,fstorage.prase_bucket_path,'asdf')
+        self.assertEqual(fstorage.prase_bucket_path('gs://asdf'), 'asdf')
+        self.assertRaises(ValueError, fstorage.prase_bucket_path, 'asdf')
 
     def test_prase_blob_path(self):
-        self.assertEqual(fstorage.prase_blob_path('gs://asdf/qwer'),('asdf','qwer'))
-        self.assertEqual(fstorage.prase_blob_path('gs://asdf/qwer/'),('asdf','qwer/'))
-        self.assertRaises(ValueError,fstorage.prase_blob_path,'asdf')
+        self.assertEqual(fstorage.prase_blob_path('gs://asdf/qwer'), ('asdf', 'qwer'))
+        self.assertEqual(fstorage.prase_blob_path('gs://asdf/qwer/'), ('asdf', 'qwer/'))
+        self.assertRaises(ValueError, fstorage.prase_blob_path, 'asdf')
 
     def test_gcp_string(self):
         timestamp = int(time.time())
         tmp_gs_path  = 'gs://futsu-test/test-LAVVKOIHAT-{0}'.format(timestamp)
 
         client = gcstorage.client.Client()
-        fstorage.string_to_blob(tmp_gs_path,'JLPUSLMIHV',client)
-        s = fstorage.blob_to_string(tmp_gs_path,client)
-        self.assertEqual(s,'JLPUSLMIHV')
+        fstorage.string_to_blob(tmp_gs_path, 'JLPUSLMIHV', client)
+        s = fstorage.blob_to_string(tmp_gs_path, client)
+        self.assertEqual(s, 'JLPUSLMIHV')
 
     def test_gcp_bytes(self):
         timestamp = int(time.time())
         tmp_gs_path  = 'gs://futsu-test/test-SCALNUVEVQ-{0}'.format(timestamp)
 
         client = gcstorage.client.Client()
-        fstorage.bytes_to_blob(tmp_gs_path,b'VUOUWXZNIA',client)
-        s = fstorage.blob_to_bytes(tmp_gs_path,client)
-        self.assertEqual(s,b'VUOUWXZNIA')
+        fstorage.bytes_to_blob(tmp_gs_path, b'VUOUWXZNIA', client)
+        s = fstorage.blob_to_bytes(tmp_gs_path, client)
+        self.assertEqual(s, b'VUOUWXZNIA')
 
     def test_gcp_file(self):
         client = gcstorage.client.Client()
         with tempfile.TemporaryDirectory() as tempdir:
             timestamp = int(time.time())
-            src_fn = os.path.join('futsu','gcp','test','test_storage.txt')
+            src_fn = os.path.join('futsu', 'gcp', 'test', 'test_storage.txt')
             tmp_gs_path  = 'gs://futsu-test/test-CQJWTXYXEJ-{0}'.format(timestamp)
-            tmp_filename = os.path.join(tempdir,'PKQXWFJWRB')
+            tmp_filename = os.path.join(tempdir, 'PKQXWFJWRB')
             
-            fstorage.file_to_blob(tmp_gs_path,src_fn,client)
-            fstorage.blob_to_file(tmp_filename,tmp_gs_path,client)
+            fstorage.file_to_blob(tmp_gs_path, src_fn, client)
+            fstorage.blob_to_file(tmp_filename, tmp_gs_path, client)
             
-            self.assertFalse(ffs.diff(src_fn,tmp_filename))
+            self.assertFalse(ffs.diff(src_fn, tmp_filename))
 
     def test_exist(self):
         timestamp = int(time.time())
         tmp_gs_path  = 'gs://futsu-test/test-NKLUNOKTWZ-{0}'.format(timestamp)
 
         client = gcstorage.client.Client()
-        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
-        fstorage.string_to_blob(tmp_gs_path,'DQJDDJMULZ',client)
-        self.assertTrue(fstorage.is_blob_exist(tmp_gs_path,client))
+        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
+        fstorage.string_to_blob(tmp_gs_path, 'DQJDDJMULZ', client)
+        self.assertTrue(fstorage.is_blob_exist(tmp_gs_path, client))
 
     def test_delete(self):
         timestamp = int(time.time())
@@ -114,25 +114,25 @@ class TestStorage(TestCase):
 
         client = gcstorage.client.Client()
 
-        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
+        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
 
-        fstorage.blob_rm(tmp_gs_path,client)
+        fstorage.blob_rm(tmp_gs_path, client)
 
-        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
+        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
 
-        fstorage.string_to_blob(tmp_gs_path,'BHAHMMJVYF',client)
-        self.assertTrue(fstorage.is_blob_exist(tmp_gs_path,client))
+        fstorage.string_to_blob(tmp_gs_path, 'BHAHMMJVYF', client)
+        self.assertTrue(fstorage.is_blob_exist(tmp_gs_path, client))
 
-        fstorage.blob_rm(tmp_gs_path,client)
+        fstorage.blob_rm(tmp_gs_path, client)
 
-        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path,client))
+        self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
 
     def test_find_blob_itr(self):
         client = gcstorage.client.Client()
         timestamp = int(time.time())
-        tmp_gs_path_list = ['gs://futsu-test/test-QMKOGJVS-{0}/{1}'.format(timestamp,i) for i in range(10)]
+        tmp_gs_path_list = ['gs://futsu-test/test-QMKOGJVS-{0}/{1}'.format(timestamp, i) for i in range(10)]
         for tmp_gs_path in tmp_gs_path_list:
-            fstorage.bytes_to_blob(tmp_gs_path,b'TBJSUSIE',client)
+            fstorage.bytes_to_blob(tmp_gs_path, b'TBJSUSIE', client)
 
         blob_list = fstorage.find_blob_itr('gs://futsu-test/test-QMKOGJVS-{0}/'.format(timestamp), client)
         blob_list = list(blob_list)
@@ -141,46 +141,46 @@ class TestStorage(TestCase):
         self.assertEqual(blob_list, tmp_gs_path_list)
 
     def test_join(self):
-        self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX'),'gs://NARNEHCQ/UDGTMPFX')
-        self.assertEqual(fstorage.join('gs://NARNEHCQ','UDGTMPFX','AFOCASQL'),'gs://NARNEHCQ/UDGTMPFX/AFOCASQL')
+        self.assertEqual(fstorage.join('gs://NARNEHCQ', 'UDGTMPFX'), 'gs://NARNEHCQ/UDGTMPFX')
+        self.assertEqual(fstorage.join('gs://NARNEHCQ', 'UDGTMPFX', 'AFOCASQL'), 'gs://NARNEHCQ/UDGTMPFX/AFOCASQL')
 
     def test_split(self):
-        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX'),('gs://NARNEHCQ','UDGTMPFX'))
-        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),('gs://NARNEHCQ/UDGTMPFX','AFOCASQL'))
+        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX'), ('gs://NARNEHCQ', 'UDGTMPFX'))
+        self.assertEqual(fstorage.split('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'), ('gs://NARNEHCQ/UDGTMPFX', 'AFOCASQL'))
 
     def test_dirname(self):
-        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX'),'gs://NARNEHCQ')
-        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),'gs://NARNEHCQ/UDGTMPFX')
+        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX'), 'gs://NARNEHCQ')
+        self.assertEqual(fstorage.dirname('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'), 'gs://NARNEHCQ/UDGTMPFX')
 
     def test_basename(self):
-        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX'),'UDGTMPFX')
-        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'),'AFOCASQL')
+        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX'), 'UDGTMPFX')
+        self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'), 'AFOCASQL')
 
     def test_rmtree(self):
         timestamp = int(time.time())
         path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
-        path00 = fstorage.join(path0,'ITGDLUVB')
-        path000 = fstorage.join(path00,'WKBXFDTH','CMCXBJYN')
-        path001 = fstorage.join(path00,'MGNZJTXL','RGWIYPEG')
-        path01  = fstorage.join(path0,'GMZSNRPD','UOAUKUKG','VJUOXIQY')
-        path02 = fstorage.join(path0,'ITGDLUVBx')
+        path00 = fstorage.join(path0, 'ITGDLUVB')
+        path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
+        path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')
+        path01  = fstorage.join(path0, 'GMZSNRPD', 'UOAUKUKG', 'VJUOXIQY')
+        path02 = fstorage.join(path0, 'ITGDLUVBx')
         
         gcs_client = gcstorage.client.Client()
         
-        fstorage.bytes_to_blob(path000,b'',gcs_client)
-        fstorage.bytes_to_blob(path001,b'',gcs_client)
-        fstorage.bytes_to_blob(path01,b'',gcs_client)
-        fstorage.bytes_to_blob(path02,b'',gcs_client)
+        fstorage.bytes_to_blob(path000, b'', gcs_client)
+        fstorage.bytes_to_blob(path001, b'', gcs_client)
+        fstorage.bytes_to_blob(path01, b'', gcs_client)
+        fstorage.bytes_to_blob(path02, b'', gcs_client)
         
-        self.assertTrue(fstorage.is_blob_exist(path000,gcs_client))
-        self.assertTrue(fstorage.is_blob_exist(path001,gcs_client))
-        self.assertTrue(fstorage.is_blob_exist(path01,gcs_client))
-        self.assertTrue(fstorage.is_blob_exist(path02,gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path000, gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path001, gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path01, gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path02, gcs_client))
         
-        fstorage.rmtree(path00,gcs_client)
+        fstorage.rmtree(path00, gcs_client)
         
-        self.assertFalse(fstorage.is_blob_exist(path000,gcs_client))
-        self.assertFalse(fstorage.is_blob_exist(path001,gcs_client))
-        self.assertTrue(fstorage.is_blob_exist(path01,gcs_client))
-        self.assertTrue(fstorage.is_blob_exist(path02,gcs_client))
+        self.assertFalse(fstorage.is_blob_exist(path000, gcs_client))
+        self.assertFalse(fstorage.is_blob_exist(path001, gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path01, gcs_client))
+        self.assertTrue(fstorage.is_blob_exist(path02, gcs_client))
         

@@ -16,7 +16,7 @@ def local_to_path(dst, src):
         client = fs3.create_client()
         fs3.file_to_blob(dst, src, client)
         return
-    ffs.cp(dst,src)
+    ffs.cp(dst, src)
 
 def path_to_local(dst, src):
     if fgcpstorage.is_blob_path(src):
@@ -31,7 +31,7 @@ def path_to_local(dst, src):
         with urllib_request.urlopen(src) as w_in, open(dst, 'wb') as f_out:
             shutil.copyfileobj(w_in, f_out)
         return
-    ffs.cp(dst,src)
+    ffs.cp(dst, src)
 
 def bytes_to_path(dst, bytes):
     if fgcpstorage.is_blob_path(dst):
@@ -42,7 +42,7 @@ def bytes_to_path(dst, bytes):
         client = fs3.create_client()
         fs3.bytes_to_blob(dst, bytes, client)
         return
-    ffs.bytes_to_file(dst,bytes)
+    ffs.bytes_to_file(dst, bytes)
 
 def path_to_bytes(src):
     if fgcpstorage.is_blob_path(src):
@@ -59,7 +59,7 @@ def path_to_bytes(src):
 def is_blob_exist(p):
     if fgcpstorage.is_blob_path(p):
         gcs_client = gcstorage.client.Client()
-        return fgcpstorage.is_blob_exist(p,gcs_client)
+        return fgcpstorage.is_blob_exist(p, gcs_client)
     if fs3.is_blob_path(p):
         client = fs3.create_client()
         return fs3.is_blob_exist(p, client)
@@ -98,7 +98,7 @@ def split(p):
     if fs3.is_path(p):
         return fs3.split(p)
     if p.startswith('https://') or p.startswith('http://'):
-        return (dirname(p),basename(p))
+        return (dirname(p), basename(p))
     return os.path.split(p)
 
 def basename(p):
@@ -128,4 +128,4 @@ def rmtree(p):
         fs3.rmtree(p, client)
     if p.startswith('https://') or p.startswith('http://'):
         raise Exception('CVALHPEH http(s) not support rmtree')
-    shutil.rmtree(p,ignore_errors=True)
+    shutil.rmtree(p, ignore_errors=True)

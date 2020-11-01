@@ -56,7 +56,7 @@ def create_client(region_name=None):
 #    bucket_name, blob_name = prase_blob_path(gs_path)
 #    return client.bucket(bucket_name).blob(blob_name)
 
-def file_to_blob(dst,src,client):
+def file_to_blob(dst, src, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     client.upload_file(
         Filename = src,
@@ -64,7 +64,7 @@ def file_to_blob(dst,src,client):
         Key = dst_object_key,
     )
 
-def blob_to_file(dst,src,client):
+def blob_to_file(dst, src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
     client.download_file(
         Filename = dst,
@@ -72,7 +72,7 @@ def blob_to_file(dst,src,client):
         Key = src_object_key,
     )
 
-def bytes_to_blob(dst,bytes,client):
+def bytes_to_blob(dst, bytes, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     with io.BytesIO(bytes) as bout:
         client.upload_fileobj(
@@ -81,7 +81,7 @@ def bytes_to_blob(dst,bytes,client):
             Key = dst_object_key,
         )
 
-def blob_to_bytes(src,client):
+def blob_to_bytes(src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
     with io.BytesIO() as bin:
         client.download_fileobj(
@@ -92,13 +92,13 @@ def blob_to_bytes(src,client):
         bytes = bin.getvalue()
     return bytes
 
-def string_to_blob(dst,s,client):
-    bytes_to_blob(dst,s.encode('utf8'),client)
+def string_to_blob(dst, s, client):
+    bytes_to_blob(dst, s.encode('utf8'), client)
 
-def blob_to_string(src,client):
-    return blob_to_bytes(src,client).decode('utf8')
+def blob_to_string(src, client):
+    return blob_to_bytes(src, client).decode('utf8')
 
-def is_blob_exist(path,client):
+def is_blob_exist(path, client):
     bucket_name, object_key = prase_blob_path(path)
     try:
         client.head_object(
@@ -112,7 +112,7 @@ def is_blob_exist(path,client):
         raise e
     assert(False)
 
-def blob_rm(path,client):
+def blob_rm(path, client):
     bucket_name, object_key = prase_blob_path(path)
     client.delete_object(
         Bucket = bucket_name,
@@ -144,7 +144,7 @@ def find_blob_itr(prefix, client, **kwargs):
                             None
         if 'Contents' in ret_list:
             ret_list = ret_list['Contents']
-            ret_list = map(lambda i:'s3://{}/{}'.format(bucket_name, i['Key']), ret_list)
+            ret_list = map(lambda i: 's3://{}/{}'.format(bucket_name, i['Key']), ret_list)
             for ret in ret_list:
                 yield ret
         if continuationtoken is None:
@@ -154,7 +154,7 @@ def join(*args):
     return '/'.join(args)
 
 def split(p):
-    return (dirname(p),basename(p))
+    return (dirname(p), basename(p))
 
 def dirname(p):
     return p[:p.rindex('/')]
@@ -162,7 +162,7 @@ def dirname(p):
 def basename(p):
     return p[p.rindex('/')+1:]
 
-def rmtree(p,client):
+def rmtree(p, client):
     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_objects
     prefix = f'{p}/'
     bucket_name, object_key = prase_blob_path(prefix)
@@ -180,14 +180,14 @@ def rmtree(p,client):
                             None
         if 'Contents' in ret_list:
             object_list = ret_list['Contents']
-            object_list = map(lambda i:{'Key':i['Key']},object_list)
+            object_list = map(lambda i: {'Key': i['Key']}, object_list)
             object_list = list(object_list)
             print(f'MVLWQTFX object_list={object_list}')
             delete_ret = client.delete_objects(
                 Bucket = bucket_name,
-                Delete = {'Objects':object_list},
+                Delete = {'Objects': object_list},
             )
-            if delete_ret.get('Errors',[]):
+            if delete_ret.get('Errors', []):
                 raise Exception('FUJYOQJW '+str(delete_ret['Errors']))
             if len(delete_ret['Deleted'])!=len(object_list):
                 raise Exception(f"YGNAUABR result-len={len(delete_ret['Deleted'])} expected-len={len(object_list)}")

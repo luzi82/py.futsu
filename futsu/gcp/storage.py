@@ -47,28 +47,28 @@ def blob(gs_path, client):
     bucket_name, blob_name = prase_blob_path(gs_path)
     return client.bucket(bucket_name).blob(blob_name)
 
-def file_to_blob(dst,src,client):
+def file_to_blob(dst, src, client):
     blob(dst, client).upload_from_filename(src)
 
-def blob_to_file(dst,src,client):
+def blob_to_file(dst, src, client):
     blob(src, client).download_to_filename(dst)
 
-def string_to_blob(dst,s,client):
+def string_to_blob(dst, s, client):
     blob(dst, client).upload_from_string(s.encode('utf8'))
 
-def blob_to_string(src,client):
+def blob_to_string(src, client):
     return blob(src, client).download_as_string().decode('utf8')
 
-def bytes_to_blob(dst,s,client):
+def bytes_to_blob(dst, s, client):
     blob(dst, client).upload_from_string(s)
 
-def blob_to_bytes(src,client):
+def blob_to_bytes(src, client):
     return blob(src, client).download_as_string()
 
-def is_blob_exist(path,client):
+def is_blob_exist(path, client):
     return blob(path, client).exists()
 
-def blob_rm(path,client):
+def blob_rm(path, client):
     b = blob(path, client)
     if b.exists():
         b.delete()
@@ -76,14 +76,14 @@ def blob_rm(path,client):
 def find_blob_itr(prefix, client):
     bucket_name, blob_name = prase_blob_path(prefix)
     itr = client.list_blobs(bucket_name, prefix=blob_name)
-    itr = map(lambda i:'gs://{}/{}'.format(bucket_name,i.name), itr)
+    itr = map(lambda i: 'gs://{}/{}'.format(bucket_name, i.name), itr)
     return itr
 
 def join(*args):
     return '/'.join(args)
 
 def split(p):
-    return (dirname(p),basename(p))
+    return (dirname(p), basename(p))
 
 def dirname(p):
     return p[:p.rindex('/')]
