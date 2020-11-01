@@ -11,6 +11,7 @@ def init_BUCKET_PATH_FORMAT_RE():
     if BUCKET_PATH_FORMAT_RE is None:
         BUCKET_PATH_FORMAT_RE = re.compile(BUCKET_PATH_FORMAT)
 
+
 BLOB_PATH_FORMAT = 'gs://([^/]+)/(.+)'
 BLOB_PATH_FORMAT_RE = None
 
@@ -38,14 +39,16 @@ def is_path(path):
 def prase_bucket_path(path):
     init_BUCKET_PATH_FORMAT_RE()
     m = BUCKET_PATH_FORMAT_RE.fullmatch(path)
-    if not m: raise ValueError()
+    if not m:
+        raise ValueError()
     return m.group(1)
 
 
 def prase_blob_path(path):
     init_BLOB_PATH_FORMAT_RE()
     m = BLOB_PATH_FORMAT_RE.fullmatch(path)
-    if not m: raise ValueError()
+    if not m:
+        raise ValueError()
     return m.group(1), m.group(2)
 
 

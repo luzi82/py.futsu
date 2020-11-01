@@ -2,7 +2,7 @@ import unittest
 from unittest import TestCase
 import futsu.aws.s3 as fstorage
 import futsu.fs as ffs
-import futsu.storage as ffstorage # for http download
+import futsu.storage as ffstorage  # for http download
 import tempfile
 import os
 import time
@@ -72,7 +72,7 @@ class TestStorage(TestCase):
 
     def test_aws_string(self):
         timestamp = int(time.time())
-        tmp_gs_path  = 's3://futsu-test/test-PPCFADJEPR-{0}'.format(timestamp)
+        tmp_gs_path = 's3://futsu-test/test-PPCFADJEPR-{0}'.format(timestamp)
 
         client = fstorage.create_client()
         fstorage.string_to_blob(tmp_gs_path, 'NSODRIGNUR', client)
@@ -84,17 +84,17 @@ class TestStorage(TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             timestamp = int(time.time())
             src_fn = os.path.join('futsu', 'aws', 'test', 'test_storage.txt')
-            tmp_gs_path  = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
             tmp_filename = os.path.join(tempdir, 'QDVBADVVVW')
-            
+
             fstorage.file_to_blob(tmp_gs_path, src_fn, client)
             fstorage.blob_to_file(tmp_filename, tmp_gs_path, client)
-            
+
             self.assertFalse(ffs.diff(src_fn, tmp_filename))
 
     def test_exist(self):
         timestamp = int(time.time())
-        tmp_gs_path  = 's3://futsu-test/test-YYAZXVHGVW-{0}'.format(timestamp)
+        tmp_gs_path = 's3://futsu-test/test-YYAZXVHGVW-{0}'.format(timestamp)
 
         client = fstorage.create_client()
         self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
@@ -103,7 +103,7 @@ class TestStorage(TestCase):
 
     def test_delete(self):
         timestamp = int(time.time())
-        tmp_gs_path  = 's3://futsu-test/test-WABWGQVWRP-{0}'.format(timestamp)
+        tmp_gs_path = 's3://futsu-test/test-WABWGQVWRP-{0}'.format(timestamp)
 
         client = fstorage.create_client()
 
@@ -125,10 +125,10 @@ class TestStorage(TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             timestamp = int(time.time())
             src_fn = os.path.join('futsu', 'aws', 'test', 'test_storage.txt')
-            tmp_gs_path  = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
-            tmp_http_path  = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_http_path = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(timestamp)
             tmp_filename = os.path.join(tempdir, 'QHDCXHYRKZ')
-            
+
             client = fstorage.create_client()
 
             # no upload, should be 404
@@ -137,14 +137,14 @@ class TestStorage(TestCase):
 
             # upload
             fstorage.file_to_blob(tmp_gs_path, src_fn, client)
-            
+
             # bad acl, should be 403
             with self.assertRaises(Exception):
                 ffstorage.path_to_local(tmp_filename, tmp_http_path)
-            
+
             # set acl
             fstorage.set_blob_acl(tmp_gs_path, 'public-read', client)
-            
+
             # should run ok
             ffstorage.path_to_local(tmp_filename, tmp_http_path)
             self.assertFalse(ffs.diff(src_fn, tmp_filename))
@@ -200,23 +200,23 @@ class TestStorage(TestCase):
         path00 = fstorage.join(path0, 'ITGDLUVB')
         path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
         path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')
-        path01  = fstorage.join(path0, 'GMZSNRPD', 'UOAUKUKG', 'VJUOXIQY')
+        path01 = fstorage.join(path0, 'GMZSNRPD', 'UOAUKUKG', 'VJUOXIQY')
         path02 = fstorage.join(path0, 'ITGDLUVBx')
-        
+
         s3_client = fstorage.create_client()
-        
+
         fstorage.bytes_to_blob(path000, b'', s3_client)
         fstorage.bytes_to_blob(path001, b'', s3_client)
         fstorage.bytes_to_blob(path01, b'', s3_client)
         fstorage.bytes_to_blob(path02, b'', s3_client)
-        
+
         self.assertTrue(fstorage.is_blob_exist(path000, s3_client))
         self.assertTrue(fstorage.is_blob_exist(path001, s3_client))
         self.assertTrue(fstorage.is_blob_exist(path01, s3_client))
         self.assertTrue(fstorage.is_blob_exist(path02, s3_client))
-        
+
         fstorage.rmtree(path00, s3_client)
-        
+
         self.assertFalse(fstorage.is_blob_exist(path000, s3_client))
         self.assertFalse(fstorage.is_blob_exist(path001, s3_client))
         self.assertTrue(fstorage.is_blob_exist(path01, s3_client))

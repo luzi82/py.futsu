@@ -24,7 +24,7 @@ def cp(dst, src):
 def file_to_string_list(fn, encoding='utf-8'):
     with open(fn, 'rt', encoding=encoding) as fin:
         ret = fin.readlines()
-    ret = [ i.strip('\n') for i in ret ]
+    ret = [i.strip('\n') for i in ret]
     return ret
 
 
@@ -55,6 +55,7 @@ def find_file(dir):
         for file in files:
             file_list.append(os.path.join(root, file))
     return file_list
+
 
 is_dir = os.path.isdir
 

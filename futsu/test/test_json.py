@@ -16,10 +16,10 @@ class TestJson(TestCase):
 
             self.assertFalse(os.path.isfile(tmp_filename))
 
-            data={'qwer': 'asdf'}
+            data = {'qwer': 'asdf'}
             fjson.data_to_file(tmp_filename, data)
             self.assertTrue(os.path.isfile(tmp_filename))
-            
+
             data = fjson.file_to_data(tmp_filename)
             self.assertEqual(data, {'qwer': 'asdf'})
 
@@ -33,9 +33,9 @@ class TestJson(TestCase):
 
             self.assertFalse(os.path.isfile(tmp_filename))
 
-            data={'qwer': 'asdf'}
+            data = {'qwer': 'asdf'}
             fjson.data_to_path(tmp_filename, data)
             self.assertTrue(os.path.isfile(tmp_filename))
-            
+
             data = fjson.path_to_data(tmp_filename)
             self.assertEqual(data, {'qwer': 'asdf'})

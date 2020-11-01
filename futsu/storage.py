@@ -1,3 +1,4 @@
+import os
 import lazy_import
 fgcpstorage = lazy_import.lazy_module('futsu.gcp.storage')
 gcstorage = lazy_import.lazy_module('google.cloud.storage')
@@ -5,7 +6,6 @@ fs3 = lazy_import.lazy_module('futsu.aws.s3')
 ffs = lazy_import.lazy_module('futsu.fs')
 urllib_request = lazy_import.lazy_module('urllib.request')
 shutil = lazy_import.lazy_module('shutil')
-import os
 
 
 def local_to_path(dst, src):

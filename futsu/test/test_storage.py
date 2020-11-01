@@ -14,25 +14,25 @@ class TestStorage(TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir, 'QKDQXVOOME')
             src_file = os.path.join('futsu', 'test', 'test_storage_0.txt')
-            
+
             self.assertFalse(storage.is_blob_exist(tmp_filename))
-            
+
             storage.local_to_path(tmp_filename, src_file)
             self.assertTrue(storage.is_blob_exist(tmp_filename))
             self.assertFalse(fs.diff(tmp_filename, src_file))
 
             storage.rm(tmp_filename)
             self.assertFalse(storage.is_blob_exist(tmp_filename))
-            
+
             tmp_filename = os.path.join(tempdir, 'NKNVMMYPUI')
-            bytes0=b'YENLUMVECW'
+            bytes0 = b'YENLUMVECW'
             storage.bytes_to_path(tmp_filename, bytes0)
-            bytes1=storage.path_to_bytes(tmp_filename)
+            bytes1 = storage.path_to_bytes(tmp_filename)
             self.assertEqual(bytes0, bytes1)
 
             tmp_root_path = os.path.join(tempdir, 'BDHYVQKO')
             fs.makedirs(tmp_root_path)
-            tmp_path_list = [ os.path.join(tmp_root_path, '{0}'.format(i)) for i in range(10)]
+            tmp_path_list = [os.path.join(tmp_root_path, '{0}'.format(i)) for i in range(10)]
             for tmp_path in tmp_path_list:
                 storage.bytes_to_path(tmp_path, b'')
             ret_path_list = storage.find(tmp_root_path)
@@ -47,7 +47,7 @@ class TestStorage(TestCase):
             tmp_gs_blob = 'gs://futsu-test/test-NXMUHBDEMR-{0}'.format(timestamp)
 
             self.assertFalse(storage.is_blob_exist(tmp_gs_blob))
-            
+
             storage.local_to_path(tmp_gs_blob, src_file)
             self.assertTrue(storage.is_blob_exist(tmp_gs_blob))
 
@@ -58,12 +58,12 @@ class TestStorage(TestCase):
             self.assertFalse(storage.is_blob_exist(tmp_gs_blob))
 
             tmp_gs_blob = 'gs://futsu-test/test-DQZFYPFNUV-{0}'.format(timestamp)
-            bytes0=b'RZCPRGZZBC'
+            bytes0 = b'RZCPRGZZBC'
             storage.bytes_to_path(tmp_gs_blob, bytes0)
-            bytes1=storage.path_to_bytes(tmp_gs_blob)
+            bytes1 = storage.path_to_bytes(tmp_gs_blob)
             self.assertEqual(bytes0, bytes1)
 
-            tmp_path_list = [ 'gs://futsu-test/test-NKMYDMGJ-{0}/{1}'.format(timestamp, i) for i in range(10)]
+            tmp_path_list = ['gs://futsu-test/test-NKMYDMGJ-{0}/{1}'.format(timestamp, i) for i in range(10)]
             for tmp_path in tmp_path_list:
                 storage.bytes_to_path(tmp_path, b'')
             ret_path_list = storage.find('gs://futsu-test/test-NKMYDMGJ-{0}/'.format(timestamp))
@@ -78,7 +78,7 @@ class TestStorage(TestCase):
             tmp_path = 's3://futsu-test/test-KWPIYZVIYK-{0}'.format(timestamp)
 
             self.assertFalse(storage.is_blob_exist(tmp_path))
-            
+
             storage.local_to_path(tmp_path, src_file)
             self.assertTrue(storage.is_blob_exist(tmp_path))
 
@@ -89,12 +89,12 @@ class TestStorage(TestCase):
             self.assertFalse(storage.is_blob_exist(tmp_path))
 
             tmp_gs_blob = 's3://futsu-test/test-LKUDEBPHEF-{0}'.format(timestamp)
-            bytes0=b'SUZODZKFXW'
+            bytes0 = b'SUZODZKFXW'
             storage.bytes_to_path(tmp_gs_blob, bytes0)
-            bytes1=storage.path_to_bytes(tmp_gs_blob)
+            bytes1 = storage.path_to_bytes(tmp_gs_blob)
             self.assertEqual(bytes0, bytes1)
 
-            tmp_path_list = [ 's3://futsu-test/test-SVABRZZM-{0}/{1}'.format(timestamp, i) for i in range(10)]
+            tmp_path_list = ['s3://futsu-test/test-SVABRZZM-{0}/{1}'.format(timestamp, i) for i in range(10)]
             for tmp_path in tmp_path_list:
                 storage.bytes_to_path(tmp_path, b'')
             ret_path_list = storage.find('s3://futsu-test/test-SVABRZZM-{0}/'.format(timestamp))

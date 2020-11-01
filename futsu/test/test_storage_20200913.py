@@ -24,7 +24,6 @@ class TestStorage(TestCase):
         self.assertEqual(storage.join('http://UHMNFEYK', 'XFGBYFFR'), 'http://UHMNFEYK/XFGBYFFR')
         self.assertEqual(storage.join('https://UHMNFEYK', 'XFGBYFFR'), 'https://UHMNFEYK/XFGBYFFR')
 
-
     def test_local_split(self):
         with tempfile.TemporaryDirectory() as tempdir:
             path0 = storage.join(tempdir, 'GMJZWWTM')
@@ -39,7 +38,6 @@ class TestStorage(TestCase):
     def test_http_split(self):
         self.assertEqual(storage.split('http://UHMNFEYK/XFGBYFFR'), ('http://UHMNFEYK', 'XFGBYFFR'))
         self.assertEqual(storage.split('https://UHMNFEYK/XFGBYFFR'), ('https://UHMNFEYK', 'XFGBYFFR'))
-
 
     def test_local_basename(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -56,7 +54,6 @@ class TestStorage(TestCase):
         self.assertEqual(storage.basename('http://UHMNFEYK/XFGBYFFR'), 'XFGBYFFR')
         self.assertEqual(storage.basename('https://UHMNFEYK/XFGBYFFR'), 'XFGBYFFR')
 
-
     def test_local_dirname(self):
         with tempfile.TemporaryDirectory() as tempdir:
             path0 = storage.join(tempdir, 'GMJZWWTM')
@@ -72,21 +69,20 @@ class TestStorage(TestCase):
         self.assertEqual(storage.dirname('http://UHMNFEYK/XFGBYFFR'), 'http://UHMNFEYK')
         self.assertEqual(storage.dirname('https://UHMNFEYK/XFGBYFFR'), 'https://UHMNFEYK')
 
-
     def test_local_rmtree(self):
         with tempfile.TemporaryDirectory() as tempdir:
             path0 = storage.join(tempdir, 'XMTLIIPP')
             path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
             path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
-            
+
             storage.bytes_to_path(path00, b'')
             storage.bytes_to_path(path01, b'')
-            
+
             self.assertTrue(storage.is_blob_exist(path00))
             self.assertTrue(storage.is_blob_exist(path01))
-            
+
             storage.rmtree(path0)
-            
+
             self.assertFalse(storage.is_blob_exist(path00))
             self.assertFalse(storage.is_blob_exist(path01))
 
@@ -95,15 +91,15 @@ class TestStorage(TestCase):
         path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
-        
+
         storage.bytes_to_path(path00, b'')
         storage.bytes_to_path(path01, b'')
-        
+
         self.assertTrue(storage.is_blob_exist(path00))
         self.assertTrue(storage.is_blob_exist(path01))
-        
+
         storage.rmtree(path0)
-        
+
         self.assertFalse(storage.is_blob_exist(path00))
         self.assertFalse(storage.is_blob_exist(path01))
 
@@ -112,15 +108,15 @@ class TestStorage(TestCase):
         path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
-        
+
         storage.bytes_to_path(path00, b'')
         storage.bytes_to_path(path01, b'')
-        
+
         self.assertTrue(storage.is_blob_exist(path00))
         self.assertTrue(storage.is_blob_exist(path01))
-        
+
         storage.rmtree(path0)
-        
+
         self.assertFalse(storage.is_blob_exist(path00))
         self.assertFalse(storage.is_blob_exist(path01))
 

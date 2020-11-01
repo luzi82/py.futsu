@@ -12,7 +12,7 @@ class TestFs(TestCase):
             self.assertFalse(os.path.isdir(tmp_dirname))
             fs.makedirs(tmp_dirname)
             self.assertTrue(os.path.isdir(tmp_dirname))
-            fs.makedirs(tmp_dirname) # test run 2 times
+            fs.makedirs(tmp_dirname)  # test run 2 times
             self.assertTrue(os.path.isdir(tmp_dirname))
 
     def test_reset_dir(self):
@@ -23,7 +23,7 @@ class TestFs(TestCase):
             self.assertFalse(os.path.isdir(tmp_dirname))
             self.assertFalse(os.path.isfile(tmp_filename))
 
-            fs.reset_dir(tmp_dirname) # test create tmp_dirname
+            fs.reset_dir(tmp_dirname)  # test create tmp_dirname
             self.assertTrue(os.path.isdir(tmp_dirname))
             self.assertFalse(os.path.isfile(tmp_filename))
 
@@ -32,7 +32,7 @@ class TestFs(TestCase):
             self.assertTrue(os.path.isdir(tmp_dirname))
             self.assertTrue(os.path.isfile(tmp_filename))
 
-            fs.reset_dir(tmp_dirname) # test clean tmp_filename
+            fs.reset_dir(tmp_dirname)  # test clean tmp_filename
             self.assertTrue(os.path.isdir(tmp_dirname))
             self.assertFalse(os.path.isfile(tmp_filename))
 
@@ -83,17 +83,17 @@ class TestFs(TestCase):
     def test_file_bytes_io(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tmp_filename = os.path.join(tempdir, 'INUDYDVGRH')
-            
+
             fs.bytes_to_file(tmp_filename, 'UIIUAZUNNF'.encode('utf-8'))
             txt = fs.file_to_bytes(tmp_filename).decode('utf-8')
             self.assertEqual(txt, 'UIIUAZUNNF')
 
     def test_find_file(self):
         with tempfile.TemporaryDirectory() as tempdir:
-            tmp_filename_list = [ os.path.join(tempdir, 'ISEZHQOQ-{0}'.format(i)) for i in range(10)]
+            tmp_filename_list = [os.path.join(tempdir, 'ISEZHQOQ-{0}'.format(i)) for i in range(10)]
             for tmp_filename in tmp_filename_list:
                 fs.bytes_to_file(tmp_filename, b'')
-            
+
             file_list = fs.find_file(tempdir)
             file_list = list(file_list)
             self.assertEqual(len(file_list), 10)
@@ -141,13 +141,13 @@ class TestFs(TestCase):
             # rm not exist
             tmp_path = os.path.join(tempdir, 'HYVPLFZA')
             fs.rm_dir(tmp_path)
-            
+
             # rm dir
             tmp_path = os.path.join(tempdir, 'RLZIEDFY')
             fs.makedirs(tmp_path)
             fs.rm_dir(tmp_path)
             self.assertFalse(fs.is_dir(tmp_path))
-            
+
             # rm file
             tmp_path = os.path.join(tempdir, 'KQDGCKDS')
             fs.bytes_to_file(tmp_path, b'')
@@ -158,12 +158,12 @@ class TestFs(TestCase):
             # rm not exist
             tmp_path = os.path.join(tempdir, 'DBSJBLOD')
             fs.rm_file(tmp_path)
-            
+
             # rm dir
             tmp_path = os.path.join(tempdir, 'TXZGCGFO')
             fs.makedirs(tmp_path)
             self.assertRaises(ValueError, fs.rm_file, tmp_path)
-            
+
             # rm file
             tmp_path = os.path.join(tempdir, 'NUFIPTJA')
             fs.bytes_to_file(tmp_path, b'')
@@ -175,13 +175,13 @@ class TestFs(TestCase):
             # rm not exist
             tmp_path = os.path.join(tempdir, 'UFIUJLKN')
             fs.rm_file(tmp_path)
-            
+
             # rm dir
             tmp_path = os.path.join(tempdir, 'JMGSKISO')
             fs.makedirs(tmp_path)
             fs.rm_dir(tmp_path)
             self.assertFalse(fs.is_dir(tmp_path))
-            
+
             # rm file
             tmp_path = os.path.join(tempdir, 'RNNUTMLB')
             fs.bytes_to_file(tmp_path, b'')

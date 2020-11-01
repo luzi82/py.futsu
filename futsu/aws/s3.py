@@ -1,7 +1,7 @@
+import futsu.aws as faws
 import lazy_import
 import re
 boto3 = lazy_import.lazy_module('boto3')
-import futsu.aws as faws
 io = lazy_import.lazy_module('io')
 botocore_exceptions = lazy_import.lazy_module('botocore.exceptions')
 
@@ -13,6 +13,7 @@ def init_BUCKET_PATH_FORMAT_RE():
     global BUCKET_PATH_FORMAT_RE
     if BUCKET_PATH_FORMAT_RE is None:
         BUCKET_PATH_FORMAT_RE = re.compile(BUCKET_PATH_FORMAT)
+
 
 BLOB_PATH_FORMAT = 's3://([^/]+)/(.+)'
 BLOB_PATH_FORMAT_RE = None
@@ -41,14 +42,16 @@ def is_path(path):
 def prase_bucket_path(path):
     init_BUCKET_PATH_FORMAT_RE()
     m = BUCKET_PATH_FORMAT_RE.fullmatch(path)
-    if not m: raise ValueError()
+    if not m:
+        raise ValueError()
     return m.group(1)
 
 
 def prase_blob_path(path):
     init_BLOB_PATH_FORMAT_RE()
     m = BLOB_PATH_FORMAT_RE.fullmatch(path)
-    if not m: raise ValueError()
+    if not m:
+        raise ValueError()
     return m.group(1), m.group(2)
 
 
@@ -58,11 +61,11 @@ def create_client(region_name=None):
             region_name = faws.default_region_name
     return boto3.client('s3')
 
-#def bucket(gs_path, client):
+# def bucket(gs_path, client):
 #    bucket_name = prase_bucket_path(gs_path)
 #    return client.bucket(bucket_name)
 
-#def blob(gs_path, client):
+# def blob(gs_path, client):
 #    bucket_name, blob_name = prase_blob_path(gs_path)
 #    return client.bucket(bucket_name).blob(blob_name)
 
@@ -153,7 +156,8 @@ def find_blob_itr(prefix, client, **kwargs):
     my_kwargs = {}
     while True:
         my_kwargs = {}
-        if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
+        if continuationtoken is not None:
+            my_kwargs['ContinuationToken'] = continuationtoken
         ret_list = client.list_objects_v2(
             Bucket=bucket_name,
             Prefix=object_key,
@@ -161,7 +165,7 @@ def find_blob_itr(prefix, client, **kwargs):
             **my_kwargs,
         )
         continuationtoken = ret_list['NextContinuationToken'] if ('NextContinuationToken' in ret_list) else \
-                            None
+            None
         if 'Contents' in ret_list:
             ret_list = ret_list['Contents']
             ret_list = map(lambda i: 's3://{}/{}'.format(bucket_name, i['Key']), ret_list)
@@ -195,14 +199,15 @@ def rmtree(p, client):
     my_kwargs = {}
     while True:
         my_kwargs = {}
-        if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
+        if continuationtoken is not None:
+            my_kwargs['ContinuationToken'] = continuationtoken
         ret_list = client.list_objects_v2(
             Bucket=bucket_name,
             Prefix=object_key,
             **my_kwargs,
         )
         continuationtoken = ret_list['NextContinuationToken'] if ('NextContinuationToken' in ret_list) else \
-                            None
+            None
         if 'Contents' in ret_list:
             object_list = ret_list['Contents']
             object_list = map(lambda i: {'Key': i['Key']}, object_list)
@@ -214,7 +219,7 @@ def rmtree(p, client):
             )
             if delete_ret.get('Errors', []):
                 raise Exception('FUJYOQJW '+str(delete_ret['Errors']))
-            if len(delete_ret['Deleted'])!=len(object_list):
+            if len(delete_ret['Deleted']) != len(object_list):
                 raise Exception(f"YGNAUABR result-len={len(delete_ret['Deleted'])} expected-len={len(object_list)}")
         if continuationtoken is None:
             break

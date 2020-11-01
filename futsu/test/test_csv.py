@@ -28,7 +28,7 @@ class TestCsv(TestCase):
 
             v_dict_list = [{'a': '3', 'b': '4'}, {'a': '1', 'b': '2'}]
             fcsv.write_csv(tmp_filename, v_dict_list)
-            
+
             v_dict_list, col_name_list = fcsv.read_csv(tmp_filename)
             self.assertEqual(col_name_list, ['a', 'b'])
             self.assertEqual(len(v_dict_list), 2)
@@ -37,7 +37,7 @@ class TestCsv(TestCase):
 
             v_dict_list = [{'a': '3', 'b': '4'}, {'a': '1', 'b': '2'}]
             fcsv.write_csv(tmp_filename, v_dict_list, col_name_list=['a'])
-            
+
             v_dict_list, col_name_list = fcsv.read_csv(tmp_filename)
             self.assertEqual(col_name_list, ['a'])
             self.assertEqual(len(v_dict_list), 2)
@@ -52,7 +52,7 @@ class TestCsv(TestCase):
                 {'a': '1', 'b': '1'}
             ]
             fcsv.write_csv(tmp_filename, v_dict_list, sort_key_list=['a', 'b'])
-            
+
             v_dict_list, col_name_list = fcsv.read_csv(tmp_filename)
             self.assertEqual(col_name_list, ['a', 'b'])
             self.assertEqual(len(v_dict_list), 5)
