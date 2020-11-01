@@ -5,6 +5,8 @@ import tempfile
 import os
 from google.cloud import storage as gcstorage
 import time
+import string
+import random
 
 
 class TestStorage(TestCase):
@@ -70,8 +72,8 @@ class TestStorage(TestCase):
         self.assertRaises(ValueError, fstorage.prase_blob_path, 'asdf')
 
     def test_gcp_string(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 'gs://futsu-test/test-LAVVKOIHAT-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 'gs://futsu-test/test-LAVVKOIHAT-{0}'.format(token)
 
         client = gcstorage.client.Client()
         fstorage.string_to_blob(tmp_gs_path, 'JLPUSLMIHV', client)
@@ -79,8 +81,8 @@ class TestStorage(TestCase):
         self.assertEqual(s, 'JLPUSLMIHV')
 
     def test_gcp_bytes(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 'gs://futsu-test/test-SCALNUVEVQ-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 'gs://futsu-test/test-SCALNUVEVQ-{0}'.format(token)
 
         client = gcstorage.client.Client()
         fstorage.bytes_to_blob(tmp_gs_path, b'VUOUWXZNIA', client)
@@ -90,9 +92,9 @@ class TestStorage(TestCase):
     def test_gcp_file(self):
         client = gcstorage.client.Client()
         with tempfile.TemporaryDirectory() as tempdir:
-            timestamp = int(time.time())
+            token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
             src_fn = os.path.join('futsu', 'gcp', 'test', 'test_storage.txt')
-            tmp_gs_path = 'gs://futsu-test/test-CQJWTXYXEJ-{0}'.format(timestamp)
+            tmp_gs_path = 'gs://futsu-test/test-CQJWTXYXEJ-{0}'.format(token)
             tmp_filename = os.path.join(tempdir, 'PKQXWFJWRB')
 
             fstorage.file_to_blob(tmp_gs_path, src_fn, client)
@@ -101,8 +103,8 @@ class TestStorage(TestCase):
             self.assertFalse(ffs.diff(src_fn, tmp_filename))
 
     def test_exist(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 'gs://futsu-test/test-NKLUNOKTWZ-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 'gs://futsu-test/test-NKLUNOKTWZ-{0}'.format(token)
 
         client = gcstorage.client.Client()
         self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
@@ -110,8 +112,8 @@ class TestStorage(TestCase):
         self.assertTrue(fstorage.is_blob_exist(tmp_gs_path, client))
 
     def test_delete(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 'gs://futsu-test/test-EYVNPCTBAH-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 'gs://futsu-test/test-EYVNPCTBAH-{0}'.format(token)
 
         client = gcstorage.client.Client()
 
@@ -130,12 +132,12 @@ class TestStorage(TestCase):
 
     def test_find_blob_itr(self):
         client = gcstorage.client.Client()
-        timestamp = int(time.time())
-        tmp_gs_path_list = ['gs://futsu-test/test-QMKOGJVS-{0}/{1}'.format(timestamp, i) for i in range(10)]
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path_list = ['gs://futsu-test/test-QMKOGJVS-{0}/{1}'.format(token, i) for i in range(10)]
         for tmp_gs_path in tmp_gs_path_list:
             fstorage.bytes_to_blob(tmp_gs_path, b'TBJSUSIE', client)
 
-        blob_list = fstorage.find_blob_itr('gs://futsu-test/test-QMKOGJVS-{0}/'.format(timestamp), client)
+        blob_list = fstorage.find_blob_itr('gs://futsu-test/test-QMKOGJVS-{0}/'.format(token), client)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
@@ -158,8 +160,8 @@ class TestStorage(TestCase):
         self.assertEqual(fstorage.basename('gs://NARNEHCQ/UDGTMPFX/AFOCASQL'), 'AFOCASQL')
 
     def test_rmtree(self):
-        timestamp = int(time.time())
-        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{token}'.format(token=token)
         path00 = fstorage.join(path0, 'ITGDLUVB')
         path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
         path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')
@@ -184,3 +186,8 @@ class TestStorage(TestCase):
         self.assertFalse(fstorage.is_blob_exist(path001, gcs_client))
         self.assertTrue(fstorage.is_blob_exist(path01, gcs_client))
         self.assertTrue(fstorage.is_blob_exist(path02, gcs_client))
+
+
+def randstr():
+    charset = list(set(string.ascii_letters) | set(string.digits))
+    return "".join(random.choice(charset)for x in range(8))

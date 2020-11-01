@@ -3,6 +3,8 @@ import futsu.storage as storage
 import tempfile
 import os
 import time
+import random
+import string
 
 
 class TestStorage(TestCase):
@@ -84,8 +86,8 @@ class TestStorage(TestCase):
             self.assertFalse(storage.is_blob_exist(path01))
 
     def test_gcp_rmtree(self):
-        timestamp = int(time.time())
-        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{token}'.format(token=token)
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
 
@@ -101,8 +103,8 @@ class TestStorage(TestCase):
         self.assertFalse(storage.is_blob_exist(path01))
 
     def test_s3_rmtree(self):
-        timestamp = int(time.time())
-        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{token}'.format(token=token)
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
 
@@ -122,3 +124,8 @@ class TestStorage(TestCase):
             storage.rmtree('https://httpbin.org/get')
         with self.assertRaises(Exception):
             storage.rmtree('http://httpbin.org/get')
+
+
+def randstr():
+    charset = list(set(string.ascii_letters) | set(string.digits))
+    return "".join(random.choice(charset)for x in range(8))

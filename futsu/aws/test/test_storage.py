@@ -6,6 +6,8 @@ import futsu.storage as ffstorage  # for http download
 import tempfile
 import os
 import time
+import string
+import random
 
 
 class TestStorage(TestCase):
@@ -71,8 +73,8 @@ class TestStorage(TestCase):
         self.assertRaises(ValueError, fstorage.prase_blob_path, 'asdf')
 
     def test_aws_string(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 's3://futsu-test/test-PPCFADJEPR-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 's3://futsu-test/test-PPCFADJEPR-{0}'.format(token)
 
         client = fstorage.create_client()
         fstorage.string_to_blob(tmp_gs_path, 'NSODRIGNUR', client)
@@ -82,9 +84,9 @@ class TestStorage(TestCase):
     def test_aws_file(self):
         client = fstorage.create_client()
         with tempfile.TemporaryDirectory() as tempdir:
-            timestamp = int(time.time())
+            token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
             src_fn = os.path.join('futsu', 'aws', 'test', 'test_storage.txt')
-            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(token)
             tmp_filename = os.path.join(tempdir, 'QDVBADVVVW')
 
             fstorage.file_to_blob(tmp_gs_path, src_fn, client)
@@ -93,8 +95,8 @@ class TestStorage(TestCase):
             self.assertFalse(ffs.diff(src_fn, tmp_filename))
 
     def test_exist(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 's3://futsu-test/test-YYAZXVHGVW-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 's3://futsu-test/test-YYAZXVHGVW-{0}'.format(token)
 
         client = fstorage.create_client()
         self.assertFalse(fstorage.is_blob_exist(tmp_gs_path, client))
@@ -102,8 +104,8 @@ class TestStorage(TestCase):
         self.assertTrue(fstorage.is_blob_exist(tmp_gs_path, client))
 
     def test_delete(self):
-        timestamp = int(time.time())
-        tmp_gs_path = 's3://futsu-test/test-WABWGQVWRP-{0}'.format(timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path = 's3://futsu-test/test-WABWGQVWRP-{0}'.format(token)
 
         client = fstorage.create_client()
 
@@ -123,10 +125,10 @@ class TestStorage(TestCase):
     def test_acl(self):
         client = fstorage.create_client()
         with tempfile.TemporaryDirectory() as tempdir:
-            timestamp = int(time.time())
+            token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
             src_fn = os.path.join('futsu', 'aws', 'test', 'test_storage.txt')
-            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
-            tmp_http_path = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(timestamp)
+            tmp_gs_path = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(token)
+            tmp_http_path = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(token)
             tmp_filename = os.path.join(tempdir, 'QHDCXHYRKZ')
 
             client = fstorage.create_client()
@@ -151,30 +153,30 @@ class TestStorage(TestCase):
 
     def test_find_blob_itr(self):
         client = fstorage.create_client()
-        timestamp = int(time.time())
-        tmp_gs_path_list = ['s3://futsu-test/test-JJLVOWMQ-{0}/{1}'.format(timestamp, i) for i in range(10)]
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        tmp_gs_path_list = ['s3://futsu-test/test-JJLVOWMQ-{0}/{1}'.format(token, i) for i in range(10)]
         for tmp_gs_path in tmp_gs_path_list:
             fstorage.bytes_to_blob(tmp_gs_path, b'ZPMSMMAU', client)
 
-        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client)
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(token), client)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
         self.assertEqual(blob_list, tmp_gs_path_list)
 
-        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client, MaxKeys=5)
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(token), client, MaxKeys=5)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
         self.assertEqual(blob_list, tmp_gs_path_list)
 
-        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(timestamp), client, MaxKeys=20)
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-JJLVOWMQ-{0}/'.format(token), client, MaxKeys=20)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 10)
         blob_list = sorted(blob_list)
         self.assertEqual(blob_list, tmp_gs_path_list)
 
-        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-HPYHCAMK-{0}/'.format(timestamp), client)
+        blob_list = fstorage.find_blob_itr('s3://futsu-test/test-HPYHCAMK-{0}/'.format(token), client)
         blob_list = list(blob_list)
         self.assertEqual(len(blob_list), 0)
 
@@ -195,8 +197,8 @@ class TestStorage(TestCase):
         self.assertEqual(fstorage.basename('s3://NARNEHCQ/UDGTMPFX/AFOCASQL'), 'AFOCASQL')
 
     def test_rmtree(self):
-        timestamp = int(time.time())
-        path0 = 's3://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
+        path0 = 's3://futsu-test/test-HOSPFEUB-{token}'.format(token=token)
         path00 = fstorage.join(path0, 'ITGDLUVB')
         path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
         path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')
@@ -224,11 +226,11 @@ class TestStorage(TestCase):
 
     @unittest.skip("fat case")
     def test_rmtree_big(self):
-        timestamp = int(time.time())
+        token = '{ts}-{r}'.format(ts=int(time.time()), r=randstr())
 
         s3_client = fstorage.create_client()
 
-        path0 = 's3://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
+        path0 = 's3://futsu-test/test-HOSPFEUB-{token}'.format(token=token)
         for i in range(1234):
             print('UQYFVDQC create {i}'.format(i=i))
             path00 = fstorage.join(path0, str(i))
@@ -246,3 +248,8 @@ class TestStorage(TestCase):
             print('UQYFVDQC check {i}'.format(i=i))
             path00 = fstorage.join(path0, str(i))
             self.assertFalse(fstorage.is_blob_exist(path00, s3_client))
+
+
+def randstr():
+    charset = list(set(string.ascii_letters) | set(string.digits))
+    return "".join(random.choice(charset)for x in range(8))
