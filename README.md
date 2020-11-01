@@ -1,5 +1,7 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/luzi82/py.futsu)
 
+![Python package](https://github.com/luzi82/py.futsu/workflows/Python%20package/badge.svg)
+
 # Futsu
 
 Futsu = Japanese 普通 , means general, ordinary, usual.
