@@ -2,10 +2,7 @@ from unittest import TestCase
 import futsu.storage as storage
 import tempfile
 import os
-import futsu.fs as fs
 import time
-import futsu.json
-import json
 
 
 class TestStorage(TestCase):

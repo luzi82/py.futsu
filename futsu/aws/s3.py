@@ -56,8 +56,8 @@ def prase_blob_path(path):
 
 
 def create_client(region_name=None):
-    if region_name == None:
-        if faws.default_region_name != None:
+    if region_name is None:
+        if faws.default_region_name is not None:
             region_name = faws.default_region_name
     return boto3.client('s3')
 

@@ -1,7 +1,5 @@
 from unittest import TestCase
 import futsu.hash as hash
-import tempfile
-import os
 
 
 class TestFs(TestCase):
