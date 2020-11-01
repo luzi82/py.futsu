@@ -24,9 +24,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Decrpt secret
-      run: ./_decrypt_secret.sh
-      env:
-        FUTSU_SECRET: ${{ secrets.FUTSU_SECRET }}
+      run: tasks/_decrypt_secret.sh ${{ secrets.FUTSU_SECRET }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip wheel
