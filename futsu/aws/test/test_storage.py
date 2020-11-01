@@ -2,10 +2,9 @@ import unittest
 from unittest import TestCase
 import futsu.aws.s3 as fstorage
 import futsu.fs as ffs
-import futsu.storage as ffstorage
+import futsu.storage as ffstorage # for http download
 import tempfile
 import os
-#from google.cloud import storage as gcstorage
 import time
 
 class TestStorage(TestCase):
@@ -70,7 +69,7 @@ class TestStorage(TestCase):
         self.assertEqual(fstorage.prase_blob_path('s3://asdf/qwer/'),('asdf','qwer/'))
         self.assertRaises(ValueError,fstorage.prase_blob_path,'asdf')
 
-    def test_gcp_string(self):
+    def test_aws_string(self):
         timestamp = int(time.time())
         tmp_gs_path  = 's3://futsu-test/test-PPCFADJEPR-{0}'.format(timestamp)
 
@@ -79,11 +78,11 @@ class TestStorage(TestCase):
         s = fstorage.blob_to_string(tmp_gs_path,client)
         self.assertEqual(s,'NSODRIGNUR')
 
-    def test_gcp_file(self):
+    def test_aws_file(self):
         client = fstorage.create_client()
         with tempfile.TemporaryDirectory() as tempdir:
             timestamp = int(time.time())
-            src_fn = os.path.join('futsu','gcp','test','test_storage.txt')
+            src_fn = os.path.join('futsu','aws','test','test_storage.txt')
             tmp_gs_path  = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
             tmp_filename = os.path.join(tempdir,'QDVBADVVVW')
             
@@ -124,7 +123,7 @@ class TestStorage(TestCase):
         client = fstorage.create_client()
         with tempfile.TemporaryDirectory() as tempdir:
             timestamp = int(time.time())
-            src_fn = os.path.join('futsu','gcp','test','test_storage.txt')
+            src_fn = os.path.join('futsu','aws','test','test_storage.txt')
             tmp_gs_path  = 's3://futsu-test/test-TOPTSPZHLZ-{0}'.format(timestamp)
             tmp_http_path  = 'https://futsu-test.s3-us-west-2.amazonaws.com/test-TOPTSPZHLZ-{0}'.format(timestamp)
             tmp_filename = os.path.join(tempdir,'QHDCXHYRKZ')
@@ -133,7 +132,7 @@ class TestStorage(TestCase):
 
             # no upload, should be 404
             with self.assertRaises(Exception):
-                blob_to_file(tmp_filename,tmp_http_path,client)
+                ffstorage.path_to_local(tmp_filename,tmp_http_path)
 
             # upload
             fstorage.file_to_blob(tmp_gs_path,src_fn,client)
