@@ -196,7 +196,7 @@ class TestStorage(TestCase):
 
     def test_rmtree(self):
         timestamp = int(time.time())
-        path0 = f's3://futsu-test/test-HOSPFEUB-{timestamp}'
+        path0 = 's3://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
         path00 = fstorage.join(path0, 'ITGDLUVB')
         path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
         path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')
@@ -228,9 +228,9 @@ class TestStorage(TestCase):
 
         s3_client = fstorage.create_client()
 
-        path0 = f's3://futsu-test/test-HOSPFEUB-{timestamp}'
+        path0 = 's3://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
         for i in range(1234):
-            print(f'UQYFVDQC create {i}')
+            print('UQYFVDQC create {i}'.format(i=i))
             path00 = fstorage.join(path0, str(i))
             fstorage.bytes_to_blob(path00, b'', s3_client)
             self.assertTrue(fstorage.is_blob_exist(path00, s3_client))
@@ -243,6 +243,6 @@ class TestStorage(TestCase):
         self.assertEqual(len(list(fstorage.find_blob_itr(path0, s3_client))), 0)
 
         for i in range(1234):
-            print(f'UQYFVDQC check {i}')
+            print('UQYFVDQC check {i}'.format(i=i))
             path00 = fstorage.join(path0, str(i))
             self.assertFalse(fstorage.is_blob_exist(path00, s3_client))

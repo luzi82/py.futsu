@@ -159,7 +159,7 @@ class TestStorage(TestCase):
 
     def test_rmtree(self):
         timestamp = int(time.time())
-        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
         path00 = fstorage.join(path0, 'ITGDLUVB')
         path000 = fstorage.join(path00, 'WKBXFDTH', 'CMCXBJYN')
         path001 = fstorage.join(path00, 'MGNZJTXL', 'RGWIYPEG')

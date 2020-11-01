@@ -120,7 +120,7 @@ def basename(p):
 
 
 def rmtree(prefix, client):
-    bucket_name, blob_name = prase_blob_path(f'{prefix}/')
+    bucket_name, blob_name = prase_blob_path('{prefix}/'.format(prefix=prefix))
     itr = client.list_blobs(bucket_name, prefix=blob_name)
     for blob in itr:
         blob.delete()

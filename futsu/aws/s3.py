@@ -193,7 +193,7 @@ def basename(p):
 
 def rmtree(p, client):
     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_objects
-    prefix = f'{p}/'
+    prefix = '{p}/'.format(p=p)
     bucket_name, object_key = prase_blob_path(prefix)
     continuationtoken = None
     my_kwargs = {}
@@ -212,7 +212,7 @@ def rmtree(p, client):
             object_list = ret_list['Contents']
             object_list = map(lambda i: {'Key': i['Key']}, object_list)
             object_list = list(object_list)
-            print(f'MVLWQTFX object_list={object_list}')
+            print('MVLWQTFX object_list={object_list}'.format(object_list=object_list))
             delete_ret = client.delete_objects(
                 Bucket=bucket_name,
                 Delete={'Objects': object_list},

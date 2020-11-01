@@ -85,7 +85,7 @@ class TestStorage(TestCase):
 
     def test_gcp_rmtree(self):
         timestamp = int(time.time())
-        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
 
@@ -102,7 +102,7 @@ class TestStorage(TestCase):
 
     def test_s3_rmtree(self):
         timestamp = int(time.time())
-        path0 = f'gs://futsu-test/test-HOSPFEUB-{timestamp}'
+        path0 = 'gs://futsu-test/test-HOSPFEUB-{timestamp}'.format(timestamp=timestamp)
         path00 = storage.join(path0, 'WKBXFDTH', 'CMCXBJYN')
         path01 = storage.join(path0, 'MGNZJTXL', 'RGWIYPEG')
 
