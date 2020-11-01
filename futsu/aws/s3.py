@@ -220,6 +220,8 @@ def rmtree(p, client):
             if delete_ret.get('Errors', []):
                 raise Exception('FUJYOQJW '+str(delete_ret['Errors']))
             if len(delete_ret['Deleted']) != len(object_list):
-                raise Exception(f"YGNAUABR result-len={len(delete_ret['Deleted'])} expected-len={len(object_list)}")
+                raise Exception("YGNAUABR result_len={result_len} expected_len={expected_len}".format(
+                  result_len=len(delete_ret['Deleted']), expected_len=len(object_list)
+                ))
         if continuationtoken is None:
             break
