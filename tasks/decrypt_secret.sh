@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-FUTSU_SECRET=${1}
+# FUTSU_SECRET=${1}
 
 rm -f secret.tar.gz
 rm -rf secret.out
