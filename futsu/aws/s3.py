@@ -70,18 +70,18 @@ def create_client(region_name=None):
 def file_to_blob(dst, src, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     client.upload_file(
-        Filename = src,
-        Bucket = dst_bucket_name,
-        Key = dst_object_key,
+        Filename=src,
+        Bucket=dst_bucket_name,
+        Key=dst_object_key,
     )
 
 
 def blob_to_file(dst, src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
     client.download_file(
-        Filename = dst,
-        Bucket = src_bucket_name,
-        Key = src_object_key,
+        Filename=dst,
+        Bucket=src_bucket_name,
+        Key=src_object_key,
     )
 
 
@@ -89,9 +89,9 @@ def bytes_to_blob(dst, bytes, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     with io.BytesIO(bytes) as bout:
         client.upload_fileobj(
-            Fileobj = bout,
-            Bucket = dst_bucket_name,
-            Key = dst_object_key,
+            Fileobj=bout,
+            Bucket=dst_bucket_name,
+            Key=dst_object_key,
         )
 
 
@@ -99,9 +99,9 @@ def blob_to_bytes(src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
     with io.BytesIO() as bin:
         client.download_fileobj(
-            Fileobj = bin,
-            Bucket = src_bucket_name,
-            Key = src_object_key,
+            Fileobj=bin,
+            Bucket=src_bucket_name,
+            Key=src_object_key,
         )
         bytes = bin.getvalue()
     return bytes
@@ -133,17 +133,17 @@ def is_blob_exist(path, client):
 def blob_rm(path, client):
     bucket_name, object_key = prase_blob_path(path)
     client.delete_object(
-        Bucket = bucket_name,
-        Key = object_key,
+        Bucket=bucket_name,
+        Key=object_key,
     )
 
 
 def set_blob_acl(path, acl, client):
     bucket_name, object_key = prase_blob_path(path)
     client.put_object_acl(
-        Bucket = bucket_name,
-        Key = object_key,
-        ACL = acl,
+        Bucket=bucket_name,
+        Key=object_key,
+        ACL=acl,
     )
 
 
@@ -155,8 +155,8 @@ def find_blob_itr(prefix, client, **kwargs):
         my_kwargs = {}
         if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
         ret_list = client.list_objects_v2(
-            Bucket = bucket_name,
-            Prefix = object_key,
+            Bucket=bucket_name,
+            Prefix=object_key,
             **kwargs,
             **my_kwargs,
         )
@@ -197,8 +197,8 @@ def rmtree(p, client):
         my_kwargs = {}
         if continuationtoken is not None: my_kwargs['ContinuationToken'] = continuationtoken
         ret_list = client.list_objects_v2(
-            Bucket = bucket_name,
-            Prefix = object_key,
+            Bucket=bucket_name,
+            Prefix=object_key,
             **my_kwargs,
         )
         continuationtoken = ret_list['NextContinuationToken'] if ('NextContinuationToken' in ret_list) else \
@@ -209,8 +209,8 @@ def rmtree(p, client):
             object_list = list(object_list)
             print(f'MVLWQTFX object_list={object_list}')
             delete_ret = client.delete_objects(
-                Bucket = bucket_name,
-                Delete = {'Objects': object_list},
+                Bucket=bucket_name,
+                Delete={'Objects': object_list},
             )
             if delete_ret.get('Errors', []):
                 raise Exception('FUJYOQJW '+str(delete_ret['Errors']))
