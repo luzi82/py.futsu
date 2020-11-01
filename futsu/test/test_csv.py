@@ -3,6 +3,7 @@ import futsu.csv as fcsv
 import tempfile
 import os
 
+
 class TestCsv(TestCase):
 
     def test_read_csv(self):

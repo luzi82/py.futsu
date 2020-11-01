@@ -3,6 +3,7 @@ import futsu.hash as hash
 import tempfile
 import os
 
+
 class TestFs(TestCase):
 
     def test_md5_str(self):

@@ -3,6 +3,7 @@ import futsu.json as fjson
 import tempfile
 import os
 
+
 class TestJson(TestCase):
 
     def test_file_to_data(self):

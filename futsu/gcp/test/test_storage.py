@@ -6,6 +6,7 @@ import os
 from google.cloud import storage as gcstorage
 import time
 
+
 class TestStorage(TestCase):
 
     def test_is_bucket_path(self):

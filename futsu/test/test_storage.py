@@ -7,6 +7,7 @@ import time
 import futsu.json
 import json
 
+
 class TestStorage(TestCase):
 
     def test_local(self):

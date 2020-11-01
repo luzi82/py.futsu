@@ -7,6 +7,8 @@ botocore_exceptions = lazy_import.lazy_module('botocore.exceptions')
 
 BUCKET_PATH_FORMAT = 's3://([^/]+)/?'
 BUCKET_PATH_FORMAT_RE = None
+
+
 def init_BUCKET_PATH_FORMAT_RE():
     global BUCKET_PATH_FORMAT_RE
     if BUCKET_PATH_FORMAT_RE is None:
@@ -14,21 +16,27 @@ def init_BUCKET_PATH_FORMAT_RE():
 
 BLOB_PATH_FORMAT = 's3://([^/]+)/(.+)'
 BLOB_PATH_FORMAT_RE = None
+
+
 def init_BLOB_PATH_FORMAT_RE():
     global BLOB_PATH_FORMAT_RE
     if BLOB_PATH_FORMAT_RE is None:
         BLOB_PATH_FORMAT_RE = re.compile(BLOB_PATH_FORMAT)
 
+
 def is_bucket_path(path):
     init_BUCKET_PATH_FORMAT_RE()
     return BUCKET_PATH_FORMAT_RE.fullmatch(path) is not None
+
 
 def is_blob_path(path):
     init_BLOB_PATH_FORMAT_RE()
     return BLOB_PATH_FORMAT_RE.fullmatch(path) is not None
 
+
 def is_path(path):
     return is_bucket_path(path) or is_blob_path(path)
+
 
 def prase_bucket_path(path):
     init_BUCKET_PATH_FORMAT_RE()
@@ -36,11 +44,13 @@ def prase_bucket_path(path):
     if not m: raise ValueError()
     return m.group(1)
 
+
 def prase_blob_path(path):
     init_BLOB_PATH_FORMAT_RE()
     m = BLOB_PATH_FORMAT_RE.fullmatch(path)
     if not m: raise ValueError()
     return m.group(1), m.group(2)
+
 
 def create_client(region_name=None):
     if region_name == None:
@@ -56,6 +66,7 @@ def create_client(region_name=None):
 #    bucket_name, blob_name = prase_blob_path(gs_path)
 #    return client.bucket(bucket_name).blob(blob_name)
 
+
 def file_to_blob(dst, src, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     client.upload_file(
@@ -63,6 +74,7 @@ def file_to_blob(dst, src, client):
         Bucket = dst_bucket_name,
         Key = dst_object_key,
     )
+
 
 def blob_to_file(dst, src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
@@ -72,6 +84,7 @@ def blob_to_file(dst, src, client):
         Key = src_object_key,
     )
 
+
 def bytes_to_blob(dst, bytes, client):
     dst_bucket_name, dst_object_key = prase_blob_path(dst)
     with io.BytesIO(bytes) as bout:
@@ -80,6 +93,7 @@ def bytes_to_blob(dst, bytes, client):
             Bucket = dst_bucket_name,
             Key = dst_object_key,
         )
+
 
 def blob_to_bytes(src, client):
     src_bucket_name, src_object_key = prase_blob_path(src)
@@ -92,11 +106,14 @@ def blob_to_bytes(src, client):
         bytes = bin.getvalue()
     return bytes
 
+
 def string_to_blob(dst, s, client):
     bytes_to_blob(dst, s.encode('utf8'), client)
 
+
 def blob_to_string(src, client):
     return blob_to_bytes(src, client).decode('utf8')
+
 
 def is_blob_exist(path, client):
     bucket_name, object_key = prase_blob_path(path)
@@ -112,12 +129,14 @@ def is_blob_exist(path, client):
         raise e
     assert(False)
 
+
 def blob_rm(path, client):
     bucket_name, object_key = prase_blob_path(path)
     client.delete_object(
         Bucket = bucket_name,
         Key = object_key,
     )
+
 
 def set_blob_acl(path, acl, client):
     bucket_name, object_key = prase_blob_path(path)
@@ -126,6 +145,7 @@ def set_blob_acl(path, acl, client):
         Key = object_key,
         ACL = acl,
     )
+
 
 def find_blob_itr(prefix, client, **kwargs):
     bucket_name, object_key = prase_blob_path(prefix)
@@ -150,17 +170,22 @@ def find_blob_itr(prefix, client, **kwargs):
         if continuationtoken is None:
             break
 
+
 def join(*args):
     return '/'.join(args)
+
 
 def split(p):
     return (dirname(p), basename(p))
 
+
 def dirname(p):
     return p[:p.rindex('/')]
 
+
 def basename(p):
     return p[p.rindex('/')+1:]
+
 
 def rmtree(p, client):
     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.delete_objects

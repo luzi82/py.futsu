@@ -3,6 +3,7 @@ import futsu.fs as fs
 import tempfile
 import os
 
+
 class TestFs(TestCase):
 
     def test_makedirs(self):

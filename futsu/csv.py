@@ -1,5 +1,6 @@
 import csv
 
+
 def read_csv(fn):
     col_name_list = None
     ret = []
@@ -13,6 +14,7 @@ def read_csv(fn):
                 assert(len(line)==len(col_name_list))
                 ret.append({col_name_list[i]: line[i] for i in range(len(col_name_list))})
     return ret, col_name_list
+
 
 def write_csv(fn, v_dict_list, col_name_list=None, sort_key_list=None):
     if col_name_list is None:

@@ -7,6 +7,7 @@ import tempfile
 import os
 import time
 
+
 class TestStorage(TestCase):
 
     def test_is_bucket_path(self):
