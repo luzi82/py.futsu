@@ -6,9 +6,40 @@ on:
       - 'r*'
 
 jobs:
-  build:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Decrpt secret
+      run: tasks/decrypt_secret.sh 
+      env:
+        FUTSU_SECRET: ${{ secrets.FUTSU_SECRET }}
+    - name: Init CI
+      run: tasks/_init_ci.sh
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # The GitHub editor is 127 chars wide
+        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: tasks/test.sh
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/secret/futsu-4bc2f6db1c50.json
+
+  release:
     name: Create Release
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,7 +55,9 @@ jobs:
           prerelease: false
 
   deploy:
+    name: Deploy to PyPI
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
