@@ -28,4 +28,4 @@ jobs:
         pip install --upgrade wheel
         pip install --upgrade setuptools twine
     - name: Build and publish
-      run: tasks/_publish.sh
+      run: bash tasks/_publish.sh
