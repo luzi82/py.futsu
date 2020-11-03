@@ -18,14 +18,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+    - name: Decrpt secret
+      run: tasks/decrypt_secret.sh 
+      env:
+        FUTSU_SECRET: ${{ secrets.FUTSU_SECRET }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+        pip install --upgrade wheel
+        pip install --upgrade setuptools twine
     - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+      run: tasks/_publish.sh
