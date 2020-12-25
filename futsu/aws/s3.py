@@ -1,9 +1,10 @@
+import futsu
 import futsu.aws as faws
 import lazy_import
 import re
-boto3 = lazy_import.lazy_module('boto3')
+boto3 = futsu.env_lazy_import('FUTSU_AWS_ENABLE','boto3')
 io = lazy_import.lazy_module('io')
-botocore_exceptions = lazy_import.lazy_module('botocore.exceptions')
+botocore_exceptions = futsu.env_lazy_import('FUTSU_AWS_ENABLE','botocore.exceptions')
 
 BUCKET_PATH_FORMAT = 's3://([^/]+)/?'
 BUCKET_PATH_FORMAT_RE = None

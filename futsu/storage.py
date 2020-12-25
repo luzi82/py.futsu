@@ -1,7 +1,9 @@
-import os
+import futsu
 import lazy_import
+import os
+
 fgcpstorage = lazy_import.lazy_module('futsu.gcp.storage')
-gcstorage = lazy_import.lazy_module('google.cloud.storage')
+gcstorage = futsu.env_lazy_import('FUTSU_GCP_ENABLE','google.cloud.storage')
 fs3 = lazy_import.lazy_module('futsu.aws.s3')
 ffs = lazy_import.lazy_module('futsu.fs')
 urllib_request = lazy_import.lazy_module('urllib.request')
