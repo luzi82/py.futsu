@@ -6,7 +6,7 @@ lazy['gcstorage'] = lazy_import.lazy_module('google.cloud.storage')
 lazy['fs3'] = lazy_import.lazy_module('futsu.aws.s3')
 lazy['ffs'] = lazy_import.lazy_module('futsu.fs')
 lazy['urllib_request'] = lazy_import.lazy_module('urllib.request')
-lazy['shutil'] = lazy_import.lazy_module('lazy['shutil']')
+lazy['shutil'] = lazy_import.lazy_module('shutil')
 
 
 def local_to_path(dst, src):
