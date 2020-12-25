@@ -8,9 +8,10 @@ DEFAULT_LAZY_ENABLE_SET = set([
     'FUTSU_AWS_ENABLE',
 ])
 
+
 def env_lazy_import(env_var, module_name):
     if env_var in os.environ:
-        if os.environ[env_var].lower() in ['0','false']:
+        if os.environ[env_var].lower() in ['0', 'false']:
             return None
     else:
         if env_var not in DEFAULT_LAZY_ENABLE_SET:

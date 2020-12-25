@@ -1,8 +1,4 @@
-import futsu
-import lazy_import
 import re
-
-#gcstorage = futsu.env_lazy_import('FUTSU_GCP_ENABLE','google.cloud.storage')
 
 BUCKET_PATH_FORMAT = 'gs://([^/]+)/?'
 BUCKET_PATH_FORMAT_RE = None
